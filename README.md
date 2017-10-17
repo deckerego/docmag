@@ -1,2 +1,3 @@
-# docmag
-Simple document management with Elasticsearch
+# DocMag
+
+Simple document management. Nothing yet to see here.

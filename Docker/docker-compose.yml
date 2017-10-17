@@ -1,0 +1,39 @@
+version: '2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+    container_name: elasticsearch01
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+#    command: curl -XPUT 'http://localhost:9200/_all/_settings?preserve_existing=true' -d '{ "index.number_of_replicas" : "0" }'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.6.3
+    container_name: kibana
+    depends_on: [ elasticsearch ]
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch01:9200
+    ports:
+      - 5601:5601
+    networks:
+      - esnet
+
+volumes:
+  esdata1:
+    driver: local
+
+networks:
+  esnet:
