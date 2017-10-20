@@ -10,7 +10,7 @@ Currently installation is performed entirely with `docker-compose`. To compose
 the necessary containers:
 
     cd Docker
-    docker-compose up &
+    docker-compose up -d
 
 This should build & run the necessary containers, then begin indexing documents
 from the tests/es directory. To shut down, execute:
