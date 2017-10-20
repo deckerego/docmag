@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3
@@ -11,14 +11,12 @@ services:
       memlock:
         soft: -1
         hard: -1
-    mem_limit: 1g
     volumes:
-      - esdata1:/usr/share/elasticsearch/data
+      - esdata01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
       - esnet
-#    command: curl -XPUT 'http://localhost:9200/_all/_settings?preserve_existing=true' -d '{ "index.number_of_replicas" : "0" }'
 
   kibana:
     image: docker.elastic.co/kibana/kibana:5.6.3
@@ -31,8 +29,25 @@ services:
     networks:
       - esnet
 
+  fscrawler:
+    build: fscrawler/.
+    container_name: fscrawler
+    depends_on: [ elasticsearch ]
+    #FIXME See Docker Compose Issue #3140
+    entrypoint: ./bin/launch_wait.sh elasticsearch01 9200
+    command: ./bin/fscrawler --config_dir /etc/fscrawler scanned --rest
+    volumes:
+      - ../tests/es:/usr/share/fscrawler/docs:ro
+      - fscconfig:/etc/fscrawler
+    ports:
+      - 8080:8080
+    networks:
+      - esnet
+
 volumes:
-  esdata1:
+  esdata01:
+    driver: local
+  fscconfig:
     driver: local
 
 networks:
