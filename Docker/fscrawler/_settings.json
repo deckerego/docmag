@@ -1,0 +1,25 @@
+{
+  "name" : "scanned",
+  "fs" : {
+    "url" : "/usr/share/fscrawler/docs/",
+    "update_rate" : "15m",
+    "continue_on_error" : true,
+    "store_source" : false,
+    "pdf_ocr" : true,
+    "ocr" : {
+      "language" : "eng"
+    }
+  },
+  "elasticsearch" : {
+   "nodes" : [ {
+     "host" : "elasticsearch01",
+     "port" : 9200,
+     "scheme" : "HTTP"
+   } ],
+   "index" : "scanned",
+   "bulk_size" : 1000,
+   "flush_interval" : "5s",
+   "username" : "elastic",
+   "password" : "changeme"
+ }
+}

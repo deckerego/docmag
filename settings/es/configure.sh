@@ -9,9 +9,9 @@ BASIC_LOGIN="$USERNAME:$PASSWORD"
 ES_SERVER="$ES_HOST:$ES_PORT"
 
 echo -n "Global index settings: "
-curl -u "$BASIC_LOGIN" -X PUT "http://$ES_SERVER/_settings" -d @es/settings/index.json
+curl -u "$BASIC_LOGIN" -X PUT "http://$ES_SERVER/_settings" -d @index.json
 echo
 
 echo -n "Universal template settings: "
-curl -u "$BASIC_LOGIN" -X PUT "http://$ES_SERVER/_template/univeral_template" -d @es/settings/template.json
+curl -u "$BASIC_LOGIN" -X PUT "http://$ES_SERVER/_template/univeral_template" -d @template.json
 echo
