@@ -13,8 +13,6 @@ services:
         hard: -1
     volumes:
       - esdata01:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
     networks:
       - esnet
 
@@ -39,6 +37,13 @@ services:
     volumes:
       - ../tests/es:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
+    networks:
+      - esnet
+
+  docmagui:
+    image: docmag/docmagui:latest
+    container_name: docmagui
+    depends_on: [ fscrawler ]
     ports:
       - 8080:8080
     networks:
