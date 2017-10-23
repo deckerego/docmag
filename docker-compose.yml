@@ -13,6 +13,8 @@ services:
         hard: -1
     volumes:
       - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
     networks:
       - esnet
 
@@ -35,7 +37,7 @@ services:
     entrypoint: ./bin/launch_wait.sh elasticsearch01 9200
     command: ./bin/fscrawler --config_dir /etc/fscrawler scanned --rest
     volumes:
-      - ../tests/es:/usr/share/fscrawler/docs:ro
+      - ./tests/es:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
     networks:
       - esnet
