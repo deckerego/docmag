@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document
 class ScannedDoc {
     @Id
     String id
+    String content
     File file
 }
 
