@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+Documents:
+<ul th:each="document : ${documents}">
+    <li th:text="${document.file.url}">TBD</li>
+</ul>
+
+</body>
+</html>

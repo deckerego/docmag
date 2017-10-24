@@ -5,8 +5,10 @@ services:
     container_name: elasticsearch01
     environment:
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.name=docmag-cluster
+      - xpack.security.enabled=false
       - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
@@ -14,7 +16,9 @@ services:
     volumes:
       - esdata01:/usr/share/elasticsearch/data
     ports:
+      #TODO Shut these ports down
       - 9200:9200
+      - 9300:9300
     networks:
       - esnet
 
@@ -37,11 +41,22 @@ services:
     entrypoint: ./bin/launch_wait.sh elasticsearch01 9200
     command: ./bin/fscrawler --config_dir /etc/fscrawler scanned --rest
     volumes:
-#      - ../tests/es:/usr/share/fscrawler/docs:ro
-      - /Volumes/shared/Scanned:/usr/share/fscrawler/docs:ro
+      - ./tests/es:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
+    networks:
+      - esnet
+
+  docmagui:
+    build: .
+    image: docmag/docmagui
+    container_name: docmagui
+    environment:
+      - "elasticHost=elasticsearch01"
+      - "elasticPort=9300"
+      - "elasticClusterName=docmag-cluster"
+    depends_on: [ fscrawler ]
     ports:
-      - 8080:8080
+      - 1080:8080
     networks:
       - esnet
 
