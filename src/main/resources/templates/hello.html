@@ -6,6 +6,11 @@
 </head>
 
 <body>
-Online
+
+Documents:
+<ul th:each="document : ${documents}">
+    <li th:text="${document.file.url}">TBD</li>
+</ul>
+
 </body>
 </html>
