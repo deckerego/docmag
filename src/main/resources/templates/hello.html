@@ -3,14 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 
 <body>
 
-Documents:
-<ul th:each="document : ${documents}">
-    <li th:text="${document.file.url}">TBD</li>
-</ul>
+<div class="container">
 
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="https://github.com/deckerego/docmag">DocMag</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/search">List Docs</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="page-header">
+        <h1>Document List</h1>
+        <p class="lead">Currently indexed documents</p>
+    </div>
+
+    <form action="/search" method="POST">
+        <div class="row">
+            <div class="col-lg-6" style="padding-bottom: 20px">
+                <div class="input-group">
+                    <input type="text" name="content" class="form-control" th:placeholder="${query.content}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-lg-10">
+            <div class="list-group" th:each="document : ${documents}">
+                <h4 class="list-group-item-heading" th:text="${document.file.last_modified}"></h4>
+                <p class="list-group-item-text" th:text="${document.path.virtual}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>

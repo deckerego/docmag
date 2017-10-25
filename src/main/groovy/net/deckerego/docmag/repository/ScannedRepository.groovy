@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
-interface HelloRepository extends ElasticsearchRepository<ScannedDoc, String> {
+interface ScannedRepository extends ElasticsearchRepository<ScannedDoc, String> {
     @Query("{\"match\" : {\"_all\" : \"?0\"}}")
     Page<ScannedDoc> findByName(String name, Pageable pageable)
 }
