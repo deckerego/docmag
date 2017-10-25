@@ -32,7 +32,7 @@
 
     <form action="/search" method="POST">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-lg-6" style="padding-bottom: 20px">
                 <div class="input-group">
                     <input type="text" name="content" class="form-control" th:placeholder="${query.content}">
                     <span class="input-group-btn">
@@ -44,9 +44,11 @@
     </form>
 
     <div class="row">
-        <div class="list-group col-md-10" th:each="document : ${documents}">
-            <h4 class="list-group-item-heading" th:text="${document.file.last_modified}"></h4>
-            <p class="list-group-item-text" th:text="${document.path.virtual}"></p>
+        <div class="col-lg-10">
+            <div class="list-group" th:each="document : ${documents}">
+                <h4 class="list-group-item-heading" th:text="${document.file.last_modified}"></h4>
+                <p class="list-group-item-text" th:text="${document.path.virtual}"></p>
+            </div>
         </div>
     </div>
 </div>
