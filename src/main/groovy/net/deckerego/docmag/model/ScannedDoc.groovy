@@ -9,8 +9,17 @@ class ScannedDoc {
     String id
     String content
     File file
+    Path path
 }
 
 class File {
+    String content_type
     String url
+    Date last_modified
+    Date indexing_date
+
+}
+
+class Path {
+    String virtual
 }

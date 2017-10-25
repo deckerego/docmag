@@ -16,7 +16,7 @@ services:
     volumes:
       - esdata01:/usr/share/elasticsearch/data
     ports:
-      #TODO Shut these ports down
+      #TODO Shut these ports down for non-development scenarios
       - 9200:9200
       - 9300:9300
     networks:
@@ -51,10 +51,10 @@ services:
     image: docmag/docmagui
     container_name: docmagui
     environment:
-      - elasticHost=elasticsearch01
-      - elasticPort=9300
-      - elasticClusterName=docmag-cluster
-    depends_on: [ fscrawler ]
+      - elasticsearch.host=elasticsearch01
+      - elasticsearch.port=9300
+      - elasticsearch.cluster=docmag-cluster
+    depends_on: [ elasticsearch ]
     ports:
       - 1080:8080
     networks:

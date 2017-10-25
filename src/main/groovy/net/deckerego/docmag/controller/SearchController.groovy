@@ -1,7 +1,7 @@
 package net.deckerego.docmag.controller
 
 import net.deckerego.docmag.model.ScannedDoc
-import net.deckerego.docmag.repository.HelloRepository
+import net.deckerego.docmag.repository.ScannedRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping("/welcome")
-class HelloController {
+@RequestMapping("/search")
+class SearchController {
     @Autowired
-    HelloRepository helloRepository
+    ScannedRepository repository
 
-    @GetMapping("/")
+    @GetMapping
     def welcome(Model model) {
         def searchDoc = new ScannedDoc(content: "Search for...")
         model.addAttribute("query", searchDoc)
         "hello"
     }
 
-    @PostMapping("/")
+    @PostMapping
     def search(Model model, @ModelAttribute ScannedDoc searchDoc) {
-        Page<ScannedDoc> results = helloRepository.findByName(searchDoc.content, new PageRequest(0, 5))
+        Page<ScannedDoc> results = repository.findByName(searchDoc.content, new PageRequest(0, 5))
         model.addAttribute("documents", results.content)
         model.addAttribute("query", searchDoc)
         "hello"

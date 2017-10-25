@@ -5,6 +5,7 @@
     "update_rate" : "15m",
     "continue_on_error" : true,
     "store_source" : false,
+    "lang_detect" : false,
     "pdf_ocr" : true,
     "ocr" : {
       "language" : "eng"

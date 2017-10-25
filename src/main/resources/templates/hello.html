@@ -18,7 +18,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/welcome/">List Docs</a></li>
+                    <li class="active"><a href="/search">List Docs</a></li>
                 </ul>
             </div>
         </div>
@@ -30,9 +30,9 @@
         <p class="lead">Currently indexed documents</p>
     </div>
 
-    <form action="/welcome/" method="POST">
+    <form action="/search" method="POST">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-md-10">
                 <div class="input-group">
                     <input type="text" name="content" class="form-control" th:placeholder="${query.content}">
                     <span class="input-group-btn">
@@ -44,10 +44,9 @@
     </form>
 
     <div class="row">
-        <div class="col-lg-12">
-            <ul class="list-group">
-                <li class="list-group-item" th:each="document : ${documents}" th:text="${document.file.url}"></li>
-            </ul>
+        <div class="list-group col-md-10" th:each="document : ${documents}">
+            <h4 class="list-group-item-heading" th:text="${document.file.last_modified}"></h4>
+            <p class="list-group-item-text" th:text="${document.path.virtual}"></p>
         </div>
     </div>
 </div>
