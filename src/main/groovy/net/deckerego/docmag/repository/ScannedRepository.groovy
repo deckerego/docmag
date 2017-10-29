@@ -24,9 +24,10 @@ class ScannedRepository {
  **/
     Page<ScannedDoc> findByName(String name, Pageable pageable) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withSort(new FieldSortBuilder("file.last_modified").order(SortOrder.DESC))
-                .withQuery(termQuery("content", name))
-                .build()
+            .withSort(new FieldSortBuilder("file.last_modified").order(SortOrder.DESC))
+            .withQuery(termQuery("content", name))
+            .withPageable(pageable)
+            .build()
 
         elasticsearchTemplate.queryForPage(searchQuery, ScannedDoc.class)
     }
