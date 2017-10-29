@@ -2,8 +2,8 @@ package net.deckerego.docmag
 
 import net.deckerego.docmag.controller.SearchController
 import net.deckerego.docmag.model.ScannedDoc
-import net.deckerego.docmag.model.File
-import net.deckerego.docmag.model.Path
+import net.deckerego.docmag.model.ScannedDoc.File
+import net.deckerego.docmag.model.ScannedDoc.Path
 import net.deckerego.docmag.repository.ScannedRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

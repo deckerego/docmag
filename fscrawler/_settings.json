@@ -19,8 +19,6 @@
    } ],
    "index" : "scanned",
    "bulk_size" : 1000,
-   "flush_interval" : "5s",
-   "username" : "elastic",
-   "password" : "changeme"
+   "flush_interval" : "5s"
  }
 }

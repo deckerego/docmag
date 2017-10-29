@@ -6,12 +6,14 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress
 import org.elasticsearch.transport.client.PreBuiltTransportClient
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate
-import org.springframework.stereotype.Component
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories
 
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "elasticsearch")
+@EnableElasticsearchRepositories("net.deckerego.docmag.repository")
 class ElasticConfig {
     String host
     int port

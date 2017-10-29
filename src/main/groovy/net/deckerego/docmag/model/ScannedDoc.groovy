@@ -10,16 +10,12 @@ class ScannedDoc {
     String content
     File file
     Path path
-}
 
-class File {
-    String content_type
-    String url
-    Date last_modified
-    Date indexing_date
+    static class File {
+        Date last_modified
+    }
 
-}
-
-class Path {
-    String virtual
+    static class Path {
+        String virtual
+    }
 }
