@@ -47,11 +47,11 @@ class SearchControllerTests {
     @Test
     void search() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new File(last_modified: Calendar.instance.time)
+        result.file = new File(lastModified: Calendar.instance.time)
         result.path = new Path(virtual: "/no/where")
 
         given(this.results.getContent()).willReturn([result])
-        given(this.repository.findByName(any(), any())).willReturn(this.results)
+        given(this.repository.findByContentContainingOrderByLastModifiedDesc(any(), any())).willReturn(this.results)
         this.mvc.perform(post("/search")
                 .param("content", "inputText")
                 .accept(MediaType.TEXT_PLAIN))

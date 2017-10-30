@@ -1,5 +1,6 @@
 package net.deckerego.docmag.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.Document
 
@@ -12,7 +13,8 @@ class ScannedDoc {
     Path path
 
     static class File {
-        Date last_modified
+        @JsonProperty("last_modified")
+        Date lastModified
     }
 
     static class Path {
