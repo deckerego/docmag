@@ -51,7 +51,7 @@ class SearchControllerTests {
         result.path = new Path(virtual: "/no/where")
 
         given(this.results.getContent()).willReturn([result])
-        given(this.repository.findByContentContainingOrderByLastModifiedDesc(any(), any())).willReturn(this.results)
+        given(this.repository.findByContent(any(), any())).willReturn(this.results)
         this.mvc.perform(post("/search")
                 .param("content", "inputText")
                 .accept(MediaType.TEXT_PLAIN))

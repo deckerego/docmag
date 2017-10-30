@@ -1,15 +1,35 @@
 package net.deckerego.docmag.repository
 
 import net.deckerego.docmag.model.ScannedDoc
+import org.elasticsearch.search.sort.FieldSortBuilder
+import org.elasticsearch.search.sort.SortOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.Repository
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
+import org.springframework.data.elasticsearch.core.query.SearchQuery
+import org.springframework.stereotype.Repository
 
-interface ScannedRepository extends Repository<ScannedDoc, String> {
+import static org.elasticsearch.index.query.QueryBuilders.termQuery
+
+@Repository
+class ScannedRepository {
     @Autowired
     ElasticsearchOperations elasticsearchTemplate
 
-    Page<ScannedDoc> findByContentContainingOrderByLastModifiedDesc(String name, Pageable pageable);
+    /**
+     * "sort": [{"file.last_modified": "desc"}, "_score"],
+     * "query": {"match": {"content": "electric"}}
+     **/
+    Page<ScannedDoc> findByContent(String name, Pageable pageable) {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withSort(new FieldSortBuilder("file.last_modified").order(SortOrder.DESC))
+                .withQuery(termQuery("content", name))
+                .withPageable(pageable)
+                .build()
+
+        elasticsearchTemplate.queryForPage(searchQuery, ScannedDoc.class)
+    }
+
 }

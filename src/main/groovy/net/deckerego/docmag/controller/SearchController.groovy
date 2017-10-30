@@ -28,7 +28,7 @@ class SearchController {
     @PostMapping
     def search(Model model, @ModelAttribute ScannedDoc searchDoc) {
         Page<ScannedDoc> results =
-                repository.findByContentContainingOrderByLastModifiedDesc(searchDoc.content, new PageRequest(0, 5))
+                repository.findByContent(searchDoc.content, new PageRequest(0, 5))
         model.addAttribute("documents", results.content)
         model.addAttribute("query", searchDoc)
         "hello"
