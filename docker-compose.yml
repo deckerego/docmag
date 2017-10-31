@@ -41,7 +41,7 @@ services:
     entrypoint: ./bin/launch_wait.sh elasticsearch01 9200
     command: ./bin/fscrawler --config_dir /etc/fscrawler scanned --rest
     volumes:
-      - /Volumes/Scanned:/usr/share/fscrawler/docs:ro
+      - ${DOCUMENT_HOST_DIR}:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
     networks:
       - esnet
@@ -51,12 +51,15 @@ services:
     image: docmag/docmagui
     container_name: docmagui
     environment:
-      - elasticsearch.host=elasticsearch01
-      - elasticsearch.port=9300
-      - elasticsearch.cluster=docmag-cluster
+      - ELASTICSEARCH_HOST=elasticsearch01
+      - ELASTICSEARCH_PORT=9300
+      - ELASTICSEARCH_CLUSTER=docmag-cluster
+      - DOCUMENT_ROOT=/usr/share/docmagui/docs
     depends_on: [ elasticsearch ]
     ports:
       - 1080:8080
+    volumes:
+      - ${DOCUMENT_HOST_DIR}:/usr/share/docmagui/docs:ro
     networks:
       - esnet
 

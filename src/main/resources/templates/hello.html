@@ -46,8 +46,11 @@
     <div class="row">
         <div class="col-lg-10">
             <div class="list-group" th:each="document : ${documents}">
-                <h4 class="list-group-item-heading" th:text="${document.file.last_modified}"></h4>
-                <p class="list-group-item-text" th:text="${document.path.virtual}"></p>
+                <h4 class="list-group-item-heading" th:text="${document.file.lastModified}"></h4>
+                <p class="list-group-item-text" th:text="${rootPath}"></p>
+                <a th:href="@{/read(name=${document.path.virtual}, type=${document.meta.format})}">
+                    <p class="list-group-item-text" th:text="${document.path.virtual}"></p>
+                </a>
             </div>
         </div>
     </div>
