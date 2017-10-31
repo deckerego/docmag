@@ -29,7 +29,7 @@ class ScannedRepository {
                 .withPageable(pageable)
                 .build()
 
-        elasticsearchTemplate.queryForPage(searchQuery, ScannedDoc.class)
+        elasticsearchTemplate.queryForPage searchQuery, ScannedDoc.class
     }
 
 }

@@ -9,8 +9,13 @@ class ScannedDoc {
     @Id
     String id
     String content
+    MetaData meta
     File file
     Path path
+
+    static class MetaData {
+        String format
+    }
 
     static class File {
         @JsonProperty("last_modified")
