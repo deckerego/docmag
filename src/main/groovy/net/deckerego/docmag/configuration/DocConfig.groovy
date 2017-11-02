@@ -7,4 +7,5 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "document")
 class DocConfig {
     String root
+    int pagesize
 }
