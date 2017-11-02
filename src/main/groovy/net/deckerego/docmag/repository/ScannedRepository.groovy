@@ -1,8 +1,6 @@
 package net.deckerego.docmag.repository
 
 import net.deckerego.docmag.model.ScannedDoc
-import org.elasticsearch.search.sort.FieldSortBuilder
-import org.elasticsearch.search.sort.SortOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -19,12 +17,10 @@ class ScannedRepository {
     ElasticsearchOperations elasticsearchTemplate
 
     /**
-     * "sort": [{"file.last_modified": "desc"}, "_score"],
      * "query": {"match": {"content": "electric"}}
      **/
     Page<ScannedDoc> findByContent(String name, Pageable pageable) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withSort(new FieldSortBuilder("file.last_modified").order(SortOrder.DESC))
                 .withQuery(termQuery("content", name))
                 .withPageable(pageable)
                 .build()

@@ -1,5 +1,6 @@
 package net.deckerego.docmag
 
+import net.deckerego.docmag.configuration.DocConfig
 import net.deckerego.docmag.controller.SearchController
 import net.deckerego.docmag.model.ScannedDoc
 import net.deckerego.docmag.model.ScannedDoc.File
@@ -17,7 +18,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 
-import static org.hamcrest.Matchers.hasItem
 import static org.hamcrest.Matchers.hasProperty
 import static org.hamcrest.Matchers.is
 import static org.mockito.BDDMockito.*
@@ -35,32 +35,70 @@ class SearchControllerTests {
     private ScannedRepository repository
 
     @MockBean
+    private DocConfig docConfig
+
+    @MockBean
     private Page<ScannedDoc> results
 
     @Test
     void welcome() {
+        given(this.docConfig.getPagesize()).willReturn(1)
+        given(this.results.getContent()).willReturn([])
+        given(this.results.getTotalElements()).willReturn(0L)
+        given(this.repository.findByContent(any(), any())).willReturn(this.results)
+
         this.mvc.perform(get("/search")
-            .accept(MediaType.TEXT_PLAIN))
-            .andExpect(status().isOk())
-            .andExpect(model().attribute("query", hasProperty("content", is("Search for..."))))
+                .accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("query", is("")))
+                .andExpect(model().attribute("results", hasProperty("content")))
+                .andExpect(model().attribute("totalPages", is(1)))
+                .andExpect(model().attribute("currentPage", is(1)))
     }
 
     @Test
-    void search() {
+    void defaultSearch() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new File(lastModified: Calendar.instance.time)
         result.path = new Path(virtual: "/no/where")
         result.meta = new MetaData(format: "application/pdf")
 
+        given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])
+        given(this.results.getTotalElements()).willReturn(1L)
         given(this.repository.findByContent(any(), any())).willReturn(this.results)
 
-        this.mvc.perform(post("/search")
-            .param("content", "inputText")
-            .accept(MediaType.TEXT_PLAIN))
-            .andExpect(status().isOk())
-            .andExpect(model().attribute("query", hasProperty("content", is("inputText"))))
-            .andExpect(model().attribute("documents", hasItem(result)))
+        this.mvc.perform(get("/search")
+                .param("query", "inputText")
+                .accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("query", is("inputText")))
+                .andExpect(model().attribute("results", hasProperty("content")))
+                .andExpect(model().attribute("totalPages", is(1)))
+                .andExpect(model().attribute("currentPage", is(1)))
+    }
+
+    @Test
+    void paginatedSearch() {
+        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
+        result.file = new File(lastModified: Calendar.instance.time)
+        result.path = new Path(virtual: "/no/where")
+        result.meta = new MetaData(format: "application/pdf")
+
+        given(this.docConfig.getPagesize()).willReturn(1)
+        given(this.results.getContent()).willReturn([result])
+        given(this.results.getTotalElements()).willReturn(2L)
+        given(this.repository.findByContent(any(), any())).willReturn(this.results)
+
+        this.mvc.perform(get("/search")
+                .param("query", "inputText")
+                .param("page", "1")
+                .accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("query", is("inputText")))
+                .andExpect(model().attribute("results", hasProperty("content")))
+                .andExpect(model().attribute("totalPages", is(2)))
+                .andExpect(model().attribute("currentPage", is(2)))
     }
 }
 

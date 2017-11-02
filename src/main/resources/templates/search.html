@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+
+<body>
+
+<div class="container">
+
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="https://github.com/deckerego/docmag">DocMag</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/search">List Docs</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="page-header">
+        <h1>Document List</h1>
+        <p class="lead">Currently indexed documents</p>
+    </div>
+
+    <form action="/search" method="GET">
+        <div class="row">
+            <div class="col-lg-6" style="padding-bottom: 20px">
+                <div class="input-group">
+                    <input type="text" name="query" class="form-control" th:placeholder="${query}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-lg-10">
+            <p>Documents found: <span th:text="${results.totalElements}"></span></p>
+            <div class="media" th:each="document : ${results.content}">
+                <div class="media-body">
+                    <h3 class="list-group-item-heading" th:text="${document.file.lastModified}"></h3>
+                    <a th:href="@{/read(name=${document.path.virtual}, type=${document.meta.format})}">
+                        <h4 class="list-group-item-text" th:text="${document.path.virtual}"></h4>
+                    </a>
+                    <p th:text="${document.content}"></p>
+                </div>
+
+                <div class="media-left media-top">
+                    <a th:href="@{/read(name=${document.path.virtual}, type=${document.meta.format})}">
+                        <img class="media-object" th:src="@{/read/thumbnail(name=${document.path.virtual}, type=${document.meta.format})}" th:alt="${document.path.virtual}"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li th:class="(1 eq ${currentPage})? 'disabled'">
+                <a th:href="(${currentPage} gt 1)? @{/search(query=${query}, page=(${currentPage} - 2))}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search(query=${query}, page=${i - 1})}" th:text="${i}"></a></li>
+            <li th:class="(${totalPages} eq ${currentPage})? 'disabled'">
+                <a th:href="(${currentPage} lt ${totalPages})? @{/search(query=${query}, page=${currentPage})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
