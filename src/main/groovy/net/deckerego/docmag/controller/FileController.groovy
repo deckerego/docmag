@@ -37,13 +37,14 @@ class FileController {
     def thumbnail(HttpServletResponse response,
               @RequestParam(value="name", required=true) String name,
               @RequestParam(value="type", required=false, defaultValue="application/pdf") String type,
-              @RequestParam(value="scale", required=false, defaultValue="0.5") String scale) {
+              @RequestParam(value="scale", required=false, defaultValue="0.5") BigDecimal scale) {
 
         if(type.contains("application/pdf")) {
             File file = new File(docConfig.root, name)
             PDDocument doc = PDDocument.load file
             PDFRenderer renderer = new PDFRenderer(doc)
-            BufferedImage image = renderer.renderImage 0, 0.5
+            BufferedImage image = renderer.renderImage 0, scale
+            image = image.getSubimage 0, 0, image.width, image.height / 2 as int
             doc.close()
 
             OutputStream os = response.getOutputStream()
