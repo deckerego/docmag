@@ -63,6 +63,17 @@ services:
     networks:
       - esnet
 
+  modsecurity:
+    build: modsecurity/.
+    container_name: modsecurity
+    environment:
+      - PARANOIA=5
+    depends_on: [ docmagui ]
+    ports:
+      - 1081:80
+    networks:
+      - esnet
+
 volumes:
   esdata01:
     driver: local
