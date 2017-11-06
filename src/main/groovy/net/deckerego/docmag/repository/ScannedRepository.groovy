@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.domain.Pageable
+import org.springframework.data.elasticsearch.core.query.GetQuery
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery
-import static org.elasticsearch.index.query.QueryBuilders.idsQuery
 
 @Repository
 class ScannedRepository {
@@ -30,10 +30,8 @@ class ScannedRepository {
     }
 
     ScannedDoc findById(String id) {
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(idsQuery(id))
-                .build()
+        GetQuery searchQuery = new GetQuery(id: id)
 
-        elasticsearchTemplate.query searchQuery, ScannedDoc.class
+        elasticsearchTemplate.queryForObject searchQuery, ScannedDoc.class
     }
 }
