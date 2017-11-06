@@ -2,6 +2,7 @@ package net.deckerego.docmag.service
 
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.PDFRenderer
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 
@@ -12,6 +13,7 @@ import java.awt.image.BufferedImage
 @Service
 class ThumbnailService {
 
+    @Cacheable("renderedThumbnails")
     BufferedImage render(File file, String type, BigDecimal scale) {
         BufferedImage image = null;
 
