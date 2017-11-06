@@ -10,6 +10,7 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
 import static org.elasticsearch.index.query.QueryBuilders.termQuery
+import static org.elasticsearch.index.query.QueryBuilders.idsQuery
 
 @Repository
 class ScannedRepository {
@@ -28,4 +29,11 @@ class ScannedRepository {
         elasticsearchTemplate.queryForPage searchQuery, ScannedDoc.class
     }
 
+    ScannedDoc findById(String id) {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(idsQuery(id))
+                .build()
+
+        elasticsearchTemplate.query searchQuery, ScannedDoc.class
+    }
 }
