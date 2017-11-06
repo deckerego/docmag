@@ -3,6 +3,7 @@ package net.deckerego.docmag.controller
 import net.deckerego.docmag.model.ScannedDoc
 import net.deckerego.docmag.repository.ScannedRepository
 import net.deckerego.docmag.service.LocalFileService
+import net.deckerego.docmag.service.ThumbnailService
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.PDFRenderer
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +29,9 @@ class FileController {
     @Autowired
     LocalFileService fileSvc
 
+    @Autowired
+    ThumbnailService thumbSvc
+
     @GetMapping
     def fetch(HttpServletResponse response,
               @RequestParam(value="id", required=true) String id) {
@@ -36,8 +40,8 @@ class FileController {
         InputStream is = new FileInputStream(fileSvc.fetchFile(scanDoc.path.virtual))
 
         OutputStream os = response.getOutputStream()
-        response.setContentType(scanDoc.meta.format)
-        IOUtils.copy(is, os)
+        response.setContentType scanDoc.meta.format
+        IOUtils.copy is, os
         response.flushBuffer()
     }
 
@@ -45,25 +49,15 @@ class FileController {
     def thumbnail(HttpServletResponse response,
               @RequestParam(value="id", required=true) String id,
               @RequestParam(value="scale", required=false, defaultValue="0.5") BigDecimal scale) {
-
         ScannedDoc scanDoc = repository.findById id
+        File file = fileSvc.fetchFile scanDoc.path.virtual
 
-        // Generating thumbnails until Tika generates their own & can be woven into fscrawler
-        // See https://issues.apache.org/jira/browse/TIKA-90
-        if(scanDoc.meta.format.contains(MediaType.APPLICATION_PDF_VALUE)) {
-            File file = fileSvc.fetchFile(scanDoc.path.virtual)
-            PDDocument doc = PDDocument.load file
-            PDFRenderer renderer = new PDFRenderer(doc)
-            BufferedImage image = renderer.renderImage 0, scale
-            image = image.getSubimage 0, 0, image.width, image.height / 2 as int
-            doc.close()
+        BufferedImage image = thumbSvc.render(file, scanDoc.meta.format, scale)
+        image = image.getSubimage 0, 0, image.width, image.height / 2 as int
 
-            OutputStream os = response.getOutputStream()
-            response.setContentType MediaType.IMAGE_PNG_VALUE
-            ImageIO.write image, "PNG", os
-            response.flushBuffer()
-        } else {
-            fetch response, id
-        }
+        OutputStream os = response.getOutputStream()
+        response.setContentType MediaType.IMAGE_PNG_VALUE
+        ImageIO.write image, "PNG", os
+        response.flushBuffer()
     }
 }
