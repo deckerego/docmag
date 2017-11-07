@@ -1,5 +1,11 @@
 {
   "name" : "scanned",
+  "rest" : {
+    "scheme" : "HTTP",
+    "host" : "fscrawler",
+    "port" : 8080,
+    "endpoint" : "fscrawler"
+  },
   "fs" : {
     "url" : "/usr/share/fscrawler/docs/",
     "update_rate" : "15m",
