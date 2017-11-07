@@ -35,6 +35,7 @@ services:
 
   fscrawler:
     build: fscrawler/.
+    image: docmag/fscrawler
     container_name: fscrawler
     depends_on: [ elasticsearch ]
     #FIXME See Docker Compose Issue #3140
@@ -43,6 +44,8 @@ services:
     volumes:
       - ${DOCUMENT_HOST_DIR}:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
+    ports:
+      - 2080:8080
     networks:
       - esnet
 
