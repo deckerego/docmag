@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.domain.Pageable
+import org.springframework.data.elasticsearch.core.query.GetQuery
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
@@ -28,4 +29,9 @@ class ScannedRepository {
         elasticsearchTemplate.queryForPage searchQuery, ScannedDoc.class
     }
 
+    ScannedDoc findById(String id) {
+        GetQuery searchQuery = new GetQuery(id: id)
+
+        elasticsearchTemplate.queryForObject searchQuery, ScannedDoc.class
+    }
 }
