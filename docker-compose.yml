@@ -15,10 +15,6 @@ services:
         hard: -1
     volumes:
       - esdata01:/usr/share/elasticsearch/data
-    ports:
-      #TODO Shut these ports down for non-development scenarios
-      - 9200:9200
-      - 9300:9300
     networks:
       - esnet
 
@@ -44,8 +40,6 @@ services:
     volumes:
       - ${DOCUMENT_HOST_DIR}:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
-    ports:
-      - 3080:8080
     networks:
       - esnet
 
@@ -59,8 +53,6 @@ services:
       - ELASTICSEARCH_CLUSTER=docmag-cluster
       - DOCUMENT_ROOT=/usr/share/docmagui/docs
     depends_on: [ elasticsearch ]
-    ports:
-      - 2080:8080
     volumes:
       - ${DOCUMENT_HOST_DIR}:/usr/share/docmagui/docs:ro
     networks:
