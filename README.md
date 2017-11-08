@@ -6,10 +6,10 @@ to make searching across documents simple and efficient.
 
 ## Installation
 
-Currently installation is performed entirely with `docker-compose`. To compose
+Installation is performed with Maven and `docker-compose`. To compose
 the necessary containers:
 
-    cd Docker
+    mvn install
     docker-compose up -d
 
 This should build & run the necessary containers, then begin indexing documents
@@ -24,5 +24,6 @@ To shut down and delete all the data generated from these containers:
 
 ## Searching & Querying Documents
 
-FS Crawler is configured to use optical character recognition to parse documents,
-and Kibana is provided for managment & querying capabilities.
+To search within your documents, view thumbnails and open the full document 
+navigate to `http://localhost:1080`. This should take you to the main search
+interface, which will perform a full text search on your indexed documents.
