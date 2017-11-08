@@ -45,7 +45,7 @@ services:
       - ${DOCUMENT_HOST_DIR}:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
     ports:
-      - 2080:8080
+      - 3080:8080
     networks:
       - esnet
 
@@ -60,7 +60,7 @@ services:
       - DOCUMENT_ROOT=/usr/share/docmagui/docs
     depends_on: [ elasticsearch ]
     ports:
-      - 1080:8080
+      - 2080:8080
     volumes:
       - ${DOCUMENT_HOST_DIR}:/usr/share/docmagui/docs:ro
     networks:
@@ -73,7 +73,7 @@ services:
       - PARANOIA=5
     depends_on: [ docmagui ]
     ports:
-      - 1081:80
+      - 1080:80
     networks:
       - esnet
 
