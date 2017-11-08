@@ -70,7 +70,7 @@ services:
     build: modsecurity/.
     container_name: modsecurity
     environment:
-      - PARANOIA=5
+      - PARANOIA=3
     depends_on: [ docmagui ]
     ports:
       - 1080:80
