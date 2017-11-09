@@ -15,6 +15,9 @@ services:
         hard: -1
     volumes:
       - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9300:9300
+      - 9200:9200
     networks:
       - esnet
 
@@ -40,6 +43,8 @@ services:
     volumes:
       - ${DOCUMENT_HOST_DIR}:/usr/share/fscrawler/docs:ro
       - fscconfig:/etc/fscrawler
+    ports:
+      - 3080:8080
     networks:
       - esnet
 
@@ -55,6 +60,8 @@ services:
     depends_on: [ elasticsearch ]
     volumes:
       - ${DOCUMENT_HOST_DIR}:/usr/share/docmagui/docs:ro
+    ports:
+      - 2080:8080
     networks:
       - esnet
 

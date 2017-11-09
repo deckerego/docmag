@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 
@@ -41,6 +42,14 @@ class SearchControllerTests {
     private Page<ScannedDoc> results
 
     @Test
+    void unauthenticated() {
+        this.mvc.perform(get("/search")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().is3xxRedirection())
+    }
+
+    @Test
+    @WithMockUser
     void welcome() {
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([])
@@ -48,7 +57,7 @@ class SearchControllerTests {
         given(this.repository.findByContent(any(), any())).willReturn(this.results)
 
         this.mvc.perform(get("/search")
-                .accept(MediaType.TEXT_PLAIN))
+                .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("query", is("")))
                 .andExpect(model().attribute("results", hasProperty("content")))
@@ -57,6 +66,7 @@ class SearchControllerTests {
     }
 
     @Test
+    @WithMockUser
     void defaultSearch() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new File(lastModified: Calendar.instance.time)
@@ -79,6 +89,7 @@ class SearchControllerTests {
     }
 
     @Test
+    @WithMockUser
     void paginatedSearch() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new File(lastModified: Calendar.instance.time)
