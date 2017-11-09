@@ -26,7 +26,7 @@ class SearchController {
     def search(Model model,
                @RequestParam(name = "query", required = false, defaultValue="") String query,
                @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber) {
-        PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "file.last_modified")
+        PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "_score", "file.last_modified")
         Page<ScannedDoc> results = repository.findByContent query, pageable
 
         results.content.each { doc ->
@@ -36,8 +36,10 @@ class SearchController {
             doc.content = doc.content.substring(minlen, maxlen)
         }
 
+        int totalPages = results.totalElements <= 0 ? 1 : Math.ceil(results.totalElements / pageable.pageSize) as int
+
         model.addAttribute"results", results
-        model.addAttribute"totalPages", results.totalElements <= 0 ? 1 : Math.ceil(results.totalElements / pageable.pageSize) as int
+        model.addAttribute"totalPages", totalPages > 20 ? 20 : totalPages
         model.addAttribute"currentPage", pageNumber + 1
         model.addAttribute"query", query
         "search"
