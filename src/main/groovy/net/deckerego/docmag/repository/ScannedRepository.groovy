@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
-import static org.elasticsearch.index.query.QueryBuilders.termQuery
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery
 
 @Repository
 class ScannedRepository {
@@ -22,7 +22,8 @@ class ScannedRepository {
      **/
     Page<ScannedDoc> findByContent(String name, Pageable pageable) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(termQuery("content", name))
+                .withIndices("scanned")
+                .withQuery(matchQuery("content", name))
                 .withPageable(pageable)
                 .build()
 
