@@ -13,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 
@@ -42,6 +43,15 @@ class FileControllerTests {
     private DocConfig docConfig
 
     @Test
+    void unauthenticated() {
+        this.mvc.perform(get("/read")
+                .param("id", "feedfacedeadbeef")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().is3xxRedirection())
+    }
+
+    @Test
+    @WithMockUser
     void fetch() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new ScannedDoc.File(lastModified: Calendar.instance.time)
@@ -59,6 +69,7 @@ class FileControllerTests {
     }
 
     @Test
+    @WithMockUser
     void thumbnail() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new ScannedDoc.File(lastModified: Calendar.instance.time)

@@ -12,3 +12,7 @@ echo
 echo -n "Universal template settings: "
 curl -X PUT "http://$ES_SERVER/_template/univeral_template" -d @template.json
 echo
+
+echo -n "Kibana monitoring template settings: "
+curl -X PUT "http://$ES_SERVER/_template/custom_monitoring" -d @kibana.json
+echo
