@@ -55,6 +55,7 @@ class SearchControllerTests {
         given(this.results.getContent()).willReturn([])
         given(this.results.getTotalElements()).willReturn(0L)
         given(this.repository.findByContent(any(), any())).willReturn(this.results)
+        given(this.repository.documentCount()).willReturn(10L)
 
         this.mvc.perform(get("/search")
                 .accept(MediaType.TEXT_HTML))
@@ -62,6 +63,7 @@ class SearchControllerTests {
                 .andExpect(model().attribute("query", is("")))
                 .andExpect(model().attribute("results", hasProperty("content")))
                 .andExpect(model().attribute("totalPages", is(1)))
+                .andExpect(model().attribute("totalDocs", is(10L)))
                 .andExpect(model().attribute("currentPage", is(1)))
     }
 
@@ -77,6 +79,7 @@ class SearchControllerTests {
         given(this.results.getContent()).willReturn([result])
         given(this.results.getTotalElements()).willReturn(1L)
         given(this.repository.findByContent(any(), any())).willReturn(this.results)
+        given(this.repository.documentCount()).willReturn(10L)
 
         this.mvc.perform(get("/search")
                 .param("query", "inputText")
@@ -85,6 +88,7 @@ class SearchControllerTests {
                 .andExpect(model().attribute("query", is("inputText")))
                 .andExpect(model().attribute("results", hasProperty("content")))
                 .andExpect(model().attribute("totalPages", is(1)))
+                .andExpect(model().attribute("totalDocs", is(10L)))
                 .andExpect(model().attribute("currentPage", is(1)))
     }
 
@@ -100,6 +104,7 @@ class SearchControllerTests {
         given(this.results.getContent()).willReturn([result])
         given(this.results.getTotalElements()).willReturn(2L)
         given(this.repository.findByContent(any(), any())).willReturn(this.results)
+        given(this.repository.documentCount()).willReturn(10L)
 
         this.mvc.perform(get("/search")
                 .param("query", "inputText")
@@ -109,6 +114,7 @@ class SearchControllerTests {
                 .andExpect(model().attribute("query", is("inputText")))
                 .andExpect(model().attribute("results", hasProperty("content")))
                 .andExpect(model().attribute("totalPages", is(2)))
+                .andExpect(model().attribute("totalDocs", is(10L)))
                 .andExpect(model().attribute("currentPage", is(2)))
     }
 }

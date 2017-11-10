@@ -39,6 +39,7 @@ class SearchController {
         int totalPages = results.totalElements <= 0 ? 1 : Math.ceil(results.totalElements / pageable.pageSize) as int
 
         model.addAttribute"results", results
+        model.addAttribute"totalDocs", repository.documentCount()
         model.addAttribute"totalPages", totalPages > 20 ? 20 : totalPages
         model.addAttribute"currentPage", pageNumber + 1
         model.addAttribute"query", query
