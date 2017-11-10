@@ -59,7 +59,10 @@
                     </li>
                 </ul>
             </nav>
-            <p>Documents found: <span th:text="${results.totalElements}"></span></p>
+            <p>
+                Found <span th:text="${results.totalElements}"></span> documents
+                out of <span th:text="${totalDocs}"></span>
+            </p>
         </div>
     </div>
 

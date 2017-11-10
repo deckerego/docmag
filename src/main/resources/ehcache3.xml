@@ -17,4 +17,14 @@
         <jsr107:mbeans enable-statistics="true"/>
     </cache>
 
+    <cache alias="scannedIndexCount">
+        <expiry>
+            <ttl unit="minutes">2</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1</heap>
+        </resources>
+        <jsr107:mbeans enable-statistics="true"/>
+    </cache>
+
 </config>
