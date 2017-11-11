@@ -53,7 +53,6 @@ class FileController {
         File file = fileSvc.fetchFile scanDoc.path.virtual
 
         BufferedImage image = thumbSvc.render(file, scanDoc.meta.format, scale)
-        image = image.getSubimage 0, 0, image.width, image.height / 2 as int
 
         OutputStream os = response.getOutputStream()
         response.setContentType MediaType.IMAGE_PNG_VALUE

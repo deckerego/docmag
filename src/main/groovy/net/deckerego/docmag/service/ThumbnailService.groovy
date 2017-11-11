@@ -14,21 +14,34 @@ import java.awt.image.BufferedImage
 // See https://issues.apache.org/jira/browse/TIKA-90
 @Service
 class ThumbnailService {
+    private final BufferedImage blankImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
 
     @Autowired
     CacheManager cacheManager
 
     @Cacheable("renderedThumbnails")
     BufferedImage render(File file, String type, BigDecimal scale) {
-        BufferedImage image = null
+        BufferedImage image
 
-        if(type.contains(MediaType.APPLICATION_PDF_VALUE)) {
-            PDDocument doc = PDDocument.load file
-            PDFRenderer renderer = new PDFRenderer(doc)
-            image = renderer.renderImage 0, scale
-            doc.close()
+        if(! type) {
+            image = blankImage
+        } else if(type.contains(MediaType.APPLICATION_PDF_VALUE)) {
+            image = renderPDF(file, scale)
+        } else {
+            image = blankImage
         }
 
+        if(image != null && image.height >= 32)
+            image.getSubimage 0, 0, image.width, image.height / 2 as int
+        else
+            image
+    }
+
+    private BufferedImage renderPDF(File file, BigDecimal scale) {
+        PDDocument doc = PDDocument.load file
+        PDFRenderer renderer = new PDFRenderer(doc)
+        BufferedImage image = renderer.renderImage 0, scale
+        doc.close()
         image
     }
 }

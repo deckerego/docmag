@@ -28,6 +28,8 @@ class ThumbnailServiceTest {
     void nothing() {
         File file = new File(System.getProperty("user.dir"),"src/test/groovy/test.pdf")
         BufferedImage image = thumbSvc.render(file, "application/binary", 0.5)
-        assertThat(image).isNull()
+        assertThat(image).isNotNull()
+        assertThat(image.height).isEqualTo(1)
+        assertThat(image.width).isEqualTo(1)
     }
 }

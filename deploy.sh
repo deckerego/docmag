@@ -1,5 +1,5 @@
 #!/bin/sh
 
-mvn test package
-docker-compose build --build-arg JARFile=docmag-0.0.1-SNAPSHOT.jar docmagui
-docker-compose up --no-deps -d docmagui
+mvn install
+docker-compose -f docker-compose.yml -f docker-compose-devel.yml build docmagui
+docker-compose -f docker-compose.yml -f docker-compose-devel.yml up -d --no-deps docmagui

@@ -4,11 +4,45 @@ DocMag bundles together Elasticsearch and FS Crawler together using Docker
 to make searching across documents simple and efficient.
 
 
+## Requirements
+
+On your target OS, ensure docker-ce is installed along with Docker Compose:
+
+https://docs.docker.com/engine/installation/
+https://docs.docker.com/compose/install/
+
+
+## Installing
+
+To install, download the small installation .zip available at:
+
+https://github.com/deckerego/docmag/releases
+
+Expand the .zip file then edit the `.env` file within to match your environment,
+ensuring it is pointing to the directory that is storing your documents.
+
+The application itself is installed using `docker-compose`. To compose the
+necessary containers and configure Elasticsearch indexes, run:
+
+    docker-compose up -d
+    cd es/
+    ./configure.sh
+
+This should build & run the necessary containers, then begin indexing documents
+from the directory specified in `.env`. To shut down, execute:
+
+    docker-compose down
+
+
 ## Building & Testing Locally
 
 Building the app and its necessary infrastructure locally is performed with
-Maven and `docker-compose`. To compose the necessary containers and configure
-Elasticsearch indexes:
+Maven and `docker-compose`.
+
+Environment-specific details (like the directory of your documents) is stored
+within the `.env` file. Make sure to edit this file after cloning the repository.
+
+To compose the necessary containers and configure Elasticsearch indexes:
 
     mvn install
     docker-compose -f docker-compose.yml -f docker-compose-devel.yml up -d
@@ -20,11 +54,8 @@ Spring Boot, fscrawler and Kibana to local ports - so don't use this in a
 production setting.
 
 This should build & run the necessary containers, then begin indexing documents
-from the tests/es directory. To shut down, execute:
-
-    docker-compose -f docker-compose.yml -f docker-compose-devel.yml down
-
-To shut down and delete all the data generated from these containers:
+from the directory specified in `.env`. To shut down and delete the Elasticsearch
+metadata generated from these containers, execute:
 
     docker-compose -f docker-compose.yml -f docker-compose-devel.yml down -v
 
