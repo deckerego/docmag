@@ -19,7 +19,6 @@ services:
       - esnet
 
   fscrawler:
-    build: fscrawler/.
     image: deckerego/fscrawler
     container_name: fscrawler
     depends_on: [ elasticsearch ]
@@ -35,7 +34,6 @@ services:
       - esnet
 
   docmagui:
-    build: .
     image: deckerego/docmagui
     container_name: docmagui
     environment:

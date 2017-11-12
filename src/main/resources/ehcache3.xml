@@ -11,8 +11,8 @@
             <ttl unit="hours">24</ttl>
         </expiry>
         <resources>
-            <heap unit="entries">20</heap>
-            <!-- disk unit="MB">200</disk -->
+            <heap unit="MB">32</heap>
+            <!-- disk unit="MB">256</disk -->
         </resources>
         <jsr107:mbeans enable-statistics="true"/>
     </cache>

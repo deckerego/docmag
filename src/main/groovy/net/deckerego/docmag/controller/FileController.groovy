@@ -17,6 +17,7 @@ import javax.imageio.ImageIO
 import javax.servlet.http.HttpServletResponse
 import org.apache.commons.io.IOUtils
 
+import java.awt.Image
 import java.awt.image.BufferedImage
 
 @RestController
@@ -40,7 +41,7 @@ class FileController {
         InputStream is = new FileInputStream(fileSvc.fetchFile(scanDoc.path.virtual))
 
         OutputStream os = response.getOutputStream()
-        response.setContentType scanDoc.meta.format
+        response.setContentType scanDoc.file.contentType
         IOUtils.copy is, os
         response.flushBuffer()
     }
@@ -52,8 +53,7 @@ class FileController {
         ScannedDoc scanDoc = repository.findById id
         File file = fileSvc.fetchFile scanDoc.path.virtual
 
-        BufferedImage image = thumbSvc.render(file, scanDoc.meta.format, scale)
-        image = image.getSubimage 0, 0, image.width, image.height / 2 as int
+        Image image = thumbSvc.render(file, scanDoc.file.contentType, scale)
 
         OutputStream os = response.getOutputStream()
         response.setContentType MediaType.IMAGE_PNG_VALUE
