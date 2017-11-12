@@ -5,7 +5,6 @@ import net.deckerego.docmag.controller.SearchController
 import net.deckerego.docmag.model.ScannedDoc
 import net.deckerego.docmag.model.ScannedDoc.File
 import net.deckerego.docmag.model.ScannedDoc.Path
-import net.deckerego.docmag.model.ScannedDoc.MetaData
 import net.deckerego.docmag.repository.ScannedRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -73,7 +72,6 @@ class SearchControllerTests {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new File(lastModified: Calendar.instance.time)
         result.path = new Path(virtual: "/no/where")
-        result.meta = new MetaData(format: "application/pdf")
 
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])
@@ -98,7 +96,6 @@ class SearchControllerTests {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new File(lastModified: Calendar.instance.time)
         result.path = new Path(virtual: "/no/where")
-        result.meta = new MetaData(format: "application/pdf")
 
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])

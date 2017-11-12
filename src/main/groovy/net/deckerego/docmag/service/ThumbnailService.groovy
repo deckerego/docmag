@@ -8,6 +8,11 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 
+import javax.imageio.ImageIO
+import java.awt.Graphics2D
+import java.awt.Image
+import java.awt.geom.AffineTransform
+import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
 
 // Generating thumbnails until Tika generates their own & can be woven into fscrawler
@@ -27,6 +32,8 @@ class ThumbnailService {
             image = blankImage
         } else if(type.contains(MediaType.APPLICATION_PDF_VALUE)) {
             image = renderPDF(file, scale)
+        } else if(type.contains(MediaType.IMAGE_JPEG_VALUE)) {
+            image = renderJPEG(file, scale)
         } else {
             image = blankImage
         }
@@ -43,5 +50,17 @@ class ThumbnailService {
         BufferedImage image = renderer.renderImage 0, scale
         doc.close()
         image
+    }
+
+    private BufferedImage renderJPEG(File file, BigDecimal scale) {
+        BigDecimal finalScale = scale / 2
+
+        BufferedImage image = ImageIO.read(file)
+        BufferedImage transformedImage = new BufferedImage(image.width * finalScale as int, image.height * finalScale as int, BufferedImage.TYPE_INT_ARGB)
+
+        AffineTransform transform = new AffineTransform()
+        transform.scale(finalScale, finalScale)
+        AffineTransformOp scaleOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR)
+        scaleOp.filter(image, transformedImage)
     }
 }

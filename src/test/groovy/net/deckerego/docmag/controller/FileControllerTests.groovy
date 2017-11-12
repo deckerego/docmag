@@ -54,9 +54,8 @@ class FileControllerTests {
     @WithMockUser
     void fetch() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new ScannedDoc.File(lastModified: Calendar.instance.time)
+        result.file = new ScannedDoc.File(lastModified: Calendar.instance.time, contentType: "application/pdf")
         result.path = new ScannedDoc.Path(virtual: "/no/where")
-        result.meta = new ScannedDoc.MetaData(format: "application/pdf;version=1.0")
 
         given(this.fileSvc.fetchFile("/no/where")).willReturn(new File("src/test/groovy/test.pdf"))
         given(this.repository.findById("feedfacedeadbeef")).willReturn(result)
@@ -72,15 +71,14 @@ class FileControllerTests {
     @WithMockUser
     void thumbnail() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new ScannedDoc.File(lastModified: Calendar.instance.time)
+        result.file = new ScannedDoc.File(lastModified: Calendar.instance.time, contentType: "application/pdf")
         result.path = new ScannedDoc.Path(virtual: "/no/where")
-        result.meta = new ScannedDoc.MetaData(format: "application/pdf;version=1.0")
 
         def testFile = new File(System.getProperty("user.dir"),"src/test/groovy/test.pdf")
         def testImage = new BufferedImage(320, 240, BufferedImage.TYPE_INT_RGB)
 
         given(this.fileSvc.fetchFile("/no/where")).willReturn(testFile)
-        given(this.thumbSvc.render(testFile, "application/pdf;version=1.0", 0.5)).willReturn(testImage)
+        given(this.thumbSvc.render(testFile, "application/pdf", 0.5)).willReturn(testImage)
         given(this.repository.findById("feedfacedeadbeef")).willReturn(result)
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
 

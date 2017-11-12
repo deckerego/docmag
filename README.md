@@ -12,28 +12,6 @@ https://docs.docker.com/engine/installation/
 https://docs.docker.com/compose/install/
 
 
-## Installing
-
-To install, download the small installation .zip available at:
-
-https://github.com/deckerego/docmag/releases
-
-Expand the .zip file then edit the `.env` file within to match your environment,
-ensuring it is pointing to the directory that is storing your documents.
-
-The application itself is installed using `docker-compose`. To compose the
-necessary containers and configure Elasticsearch indexes, run:
-
-    docker-compose up -d
-    cd es/
-    ./configure.sh
-
-This should build & run the necessary containers, then begin indexing documents
-from the directory specified in `.env`. To shut down, execute:
-
-    docker-compose down
-
-
 ## Building & Testing Locally
 
 Building the app and its necessary infrastructure locally is performed with
