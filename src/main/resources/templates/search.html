@@ -31,12 +31,27 @@
 
     <form action="/search" method="GET">
         <div class="row">
-            <div class="col-lg-6" style="padding-bottom: 20px">
+            <div class="col-lg-6" style="padding-bottom: 10px">
                 <div class="input-group">
-                    <input type="text" name="query" class="form-control" th:placeholder="${query}">
+                    <input type="text" name="query" class="form-control" th:value="${query}">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit">Go!</button>
                     </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" style="padding-bottom: 20px">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-starttime">From</span>
+                    <input type="text" name="startTime" class="form-control" aria-describedby="basic-starttime" th:value="${startTime}">
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-bottom: 20px">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-endtime">To</span>
+                    <input type="text" name="endTime" class="form-control" aria-describedby="basic-endtime" th:value="${endTime}">
                 </div>
             </div>
         </div>

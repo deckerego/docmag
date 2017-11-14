@@ -18,9 +18,13 @@ import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 
-import static org.hamcrest.Matchers.hasProperty
-import static org.hamcrest.Matchers.is
-import static org.mockito.BDDMockito.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+import static org.hamcrest.Matchers.*
+import static org.mockito.BDDMockito.given
+import static org.mockito.BDDMockito.eq
+import static org.mockito.BDDMockito.any
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
@@ -53,7 +57,7 @@ class SearchControllerTests {
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([])
         given(this.results.getTotalElements()).willReturn(0L)
-        given(this.repository.findByContent(any(), any())).willReturn(this.results)
+        given(this.repository.findByContent(eq(""), any(), any(), any())).willReturn(this.results)
         given(this.repository.documentCount()).willReturn(10L)
 
         this.mvc.perform(get("/search")
@@ -64,6 +68,8 @@ class SearchControllerTests {
                 .andExpect(model().attribute("totalPages", is(1)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
                 .andExpect(model().attribute("currentPage", is(1)))
+                .andExpect(model().attribute("startTime", notNullValue()))
+                .andExpect(model().attribute("endTime", notNullValue()))
     }
 
     @Test
@@ -76,7 +82,7 @@ class SearchControllerTests {
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])
         given(this.results.getTotalElements()).willReturn(1L)
-        given(this.repository.findByContent(any(), any())).willReturn(this.results)
+        given(this.repository.findByContent(any(), any(), any(), any())).willReturn(this.results)
         given(this.repository.documentCount()).willReturn(10L)
 
         this.mvc.perform(get("/search")
@@ -88,6 +94,8 @@ class SearchControllerTests {
                 .andExpect(model().attribute("totalPages", is(1)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
                 .andExpect(model().attribute("currentPage", is(1)))
+                .andExpect(model().attribute("startTime", notNullValue()))
+                .andExpect(model().attribute("endTime", notNullValue()))
     }
 
     @Test
@@ -100,7 +108,7 @@ class SearchControllerTests {
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])
         given(this.results.getTotalElements()).willReturn(2L)
-        given(this.repository.findByContent(any(), any())).willReturn(this.results)
+        given(this.repository.findByContent(any(), any(), any(), any())).willReturn(this.results)
         given(this.repository.documentCount()).willReturn(10L)
 
         this.mvc.perform(get("/search")
@@ -113,6 +121,39 @@ class SearchControllerTests {
                 .andExpect(model().attribute("totalPages", is(2)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
                 .andExpect(model().attribute("currentPage", is(2)))
+                .andExpect(model().attribute("startTime", notNullValue()))
+                .andExpect(model().attribute("endTime", notNullValue()))
+    }
+
+    @Test
+    @WithMockUser
+    void startEndTime() {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd")
+
+        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
+        result.file = new File(lastModified: Calendar.instance.time)
+        result.path = new Path(virtual: "/no/where")
+
+        given(this.docConfig.getPagesize()).willReturn(1)
+        given(this.results.getContent()).willReturn([result])
+        given(this.results.getTotalElements()).willReturn(2L)
+        given(this.repository.findByContent(eq("inputText"), eq(format.parse("2001-01-29")), eq(format.parse("2010-12-12")), any())).willReturn(this.results)
+        given(this.repository.documentCount()).willReturn(10L)
+
+        this.mvc.perform(get("/search")
+                .param("query", "inputText")
+                .param("page", "1")
+                .param("startTime", "2001-01-29")
+                .param("endTime", "2010-12-11")
+                .accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("query", is("inputText")))
+                .andExpect(model().attribute("results", hasProperty("content")))
+                .andExpect(model().attribute("totalPages", is(2)))
+                .andExpect(model().attribute("totalDocs", is(10L)))
+                .andExpect(model().attribute("currentPage", is(2)))
+                .andExpect(model().attribute("startTime", is("2001-01-29")))
+                .andExpect(model().attribute("endTime", is("2010-12-11")))
     }
 }
 
