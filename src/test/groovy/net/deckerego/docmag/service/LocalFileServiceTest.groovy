@@ -24,7 +24,7 @@ class LocalFileServiceTest {
     @Test
     void fetch() {
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
-        File file = fileSvc.fetchFile("src/test/groovy/test.pdf")
+        File file = fileSvc.fetchFile("src/test/docs/test.pdf")
         assertThat(file).isNotNull()
     }
 
