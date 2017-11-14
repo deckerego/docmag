@@ -27,12 +27,15 @@ class SearchController {
 
     @GetMapping
     def search(Model model,
-               @RequestParam(name = "query", required = false, defaultValue="") String query,
-               @RequestParam(name = "startTime", required = false, defaultValue="1900-01-01")
+               @RequestParam(name = "query", required = false, defaultValue = "") String query,
+               @RequestParam(name = "startTime", required = false)
                    @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
-               @RequestParam(name = "endTime", required = false, defaultValue="3000-01-01")
+               @RequestParam(name = "endTime", required = false)
                    @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
                @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber) {
+
+        if(! startTime) startTime = Calendar.getInstance().time - 7
+        if(! endTime) endTime = Calendar.getInstance().time
 
         PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "_score", "file.last_modified")
         Page<ScannedDoc> results = repository.findByContent query, startTime, endTime + 1, pageable
