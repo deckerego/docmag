@@ -24,7 +24,7 @@
      "scheme" : "HTTP"
    } ],
    "index" : "scanned",
-   "bulk_size" : 1000,
-   "flush_interval" : "5s"
+   "bulk_size" : 10,
+   "flush_interval" : "10s"
  }
 }

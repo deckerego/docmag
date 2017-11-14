@@ -28,9 +28,9 @@ class SearchController {
     @GetMapping
     def search(Model model,
                @RequestParam(name = "query", required = false, defaultValue="") String query,
-               @RequestParam(name = "startTime", required = false, defaultValue="2000-01-01")
+               @RequestParam(name = "startTime", required = false, defaultValue="1900-01-01")
                    @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
-               @RequestParam(name = "endTime", required = false, defaultValue="2099-12-31")
+               @RequestParam(name = "endTime", required = false, defaultValue="3000-01-01")
                    @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
                @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber) {
 
