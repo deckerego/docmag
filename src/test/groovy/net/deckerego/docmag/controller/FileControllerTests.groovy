@@ -57,7 +57,7 @@ class FileControllerTests {
         result.file = new ScannedDoc.File(lastModified: Calendar.instance.time, contentType: "application/pdf")
         result.path = new ScannedDoc.Path(virtual: "/no/where")
 
-        given(this.fileSvc.fetchFile("/no/where")).willReturn(new File("src/test/groovy/test.pdf"))
+        given(this.fileSvc.fetchFile("/no/where")).willReturn(new File("src/test/docs/test.pdf"))
         given(this.repository.findById("feedfacedeadbeef")).willReturn(result)
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
 
@@ -74,7 +74,7 @@ class FileControllerTests {
         result.file = new ScannedDoc.File(lastModified: Calendar.instance.time, contentType: "application/pdf")
         result.path = new ScannedDoc.Path(virtual: "/no/where")
 
-        def testFile = new File(System.getProperty("user.dir"),"src/test/groovy/test.pdf")
+        def testFile = new File(System.getProperty("user.dir"),"src/test/docs/test.pdf")
         def testImage = new BufferedImage(320, 240, BufferedImage.TYPE_INT_RGB)
 
         given(this.fileSvc.fetchFile("/no/where")).willReturn(testFile)

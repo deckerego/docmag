@@ -9,6 +9,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 
 import javax.imageio.ImageIO
+import javax.print.attribute.standard.Media
 import java.awt.Graphics2D
 import java.awt.Image
 import java.awt.geom.AffineTransform
@@ -32,8 +33,10 @@ class ThumbnailService {
             image = blankImage
         } else if(type.contains(MediaType.APPLICATION_PDF_VALUE)) {
             image = renderPDF(file, scale)
-        } else if(type.contains(MediaType.IMAGE_JPEG_VALUE)) {
-            image = renderJPEG(file, scale)
+        } else if(type.contains(MediaType.IMAGE_JPEG_VALUE)
+               || type.contains(MediaType.IMAGE_PNG_VALUE)
+               || type.contains(MediaType.IMAGE_GIF_VALUE)) {
+            image = renderImage(file, scale)
         } else {
             image = blankImage
         }
@@ -52,8 +55,8 @@ class ThumbnailService {
         image
     }
 
-    private BufferedImage renderJPEG(File file, BigDecimal scale) {
-        BigDecimal finalScale = scale / 2
+    private BufferedImage renderImage(File file, BigDecimal scale) {
+        BigDecimal finalScale = scale / 2 // Double the reduction in scale. Because I said so.
 
         BufferedImage image = ImageIO.read(file)
         BufferedImage transformedImage = new BufferedImage(image.width * finalScale as int, image.height * finalScale as int, BufferedImage.TYPE_INT_ARGB)
