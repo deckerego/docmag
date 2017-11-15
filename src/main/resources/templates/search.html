@@ -32,7 +32,7 @@
 
     <form action="/search" method="GET">
         <div class="row">
-            <div class="col-lg-6" style="padding-bottom: 10px">
+            <div class="col-sm-8" style="padding-bottom: 10px">
                 <div class="input-group">
                     <input type="text" name="query" class="form-control" th:value="${query}">
                     <span class="input-group-btn">
@@ -43,7 +43,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3" style="padding-bottom: 20px">
+            <div class="col-sm-4" style="padding-bottom: 20px">
               <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
               <span class="input-group-addon" id="basic-starttime">From</span>
               <input type="text" name="startTime" class="form-control" aria-describedby="basic-starttime" th:value="${startTime}">
@@ -53,7 +53,7 @@
             </div>
           </div>
 
-          <div class="col-md-3" style="padding-bottom: 20px">
+          <div class="col-sm-4" style="padding-bottom: 20px">
             <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
               <span class="input-group-addon" id="basic-endtime">To</span>
               <input type="text" name="endTime" class="form-control" aria-describedby="basic-endtime" th:value="${endTime}">
