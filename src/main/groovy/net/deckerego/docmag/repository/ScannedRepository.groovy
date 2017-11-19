@@ -36,6 +36,20 @@ class ScannedRepository {
         elasticsearchTemplate.queryForPage searchQuery, ScannedDoc.class
     }
 
+    Page<ScannedDoc> findByDate(Date startTime, Date endTime, Pageable pageable) {
+        RangeQueryBuilder rangeBuilder = new RangeQueryBuilder("file.last_modified")
+                .from(startTime.format("yyyy-MM-dd'T'HH:mm:ssZ"))
+                .to(endTime.format("yyyy-MM-dd'T'HH:mm:ssZ"))
+
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withIndices("scanned")
+                .withQuery(rangeBuilder)
+                .withPageable(pageable)
+                .build()
+
+        elasticsearchTemplate.queryForPage searchQuery, ScannedDoc.class
+    }
+
     ScannedDoc findById(String id) {
         GetQuery searchQuery = new GetQuery(id: id)
 
