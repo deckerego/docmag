@@ -30,7 +30,7 @@
         <h1>Document Search</h1>
     </div>
 
-    <form action="/search" method="GET">
+    <form action="/search/query" method="GET">
         <div class="row">
             <div class="col-sm-8" style="padding-bottom: 10px">
                 <div class="input-group">
@@ -67,16 +67,17 @@
 
     <div class="row">
         <div class="col-lg-10">
+            <div th:text="${type}"></div>
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:class="(1 eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} gt 1)? @{/search(query=${query}, page=(${currentPage} - 2))}" aria-label="Previous">
+                        <a th:href="(${currentPage} gt 1)? @{/search/(query=${query}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search(query=${query}, page=${i - 1})}" th:text="${i}"></a></li>
+                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search/(query=${query}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a></li>
                     <li th:class="(${totalPages} eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} lt ${totalPages})? @{/search(query=${query}, page=${currentPage})}" aria-label="Next">
+                        <a th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

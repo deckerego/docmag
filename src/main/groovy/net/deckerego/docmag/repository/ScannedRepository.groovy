@@ -13,8 +13,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery
-import static org.elasticsearch.index.query.QueryBuilders.rangeQuery
+import static org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
 
 @Repository
 class ScannedRepository {
@@ -28,7 +27,7 @@ class ScannedRepository {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withIndices("scanned")
-                .withQuery(matchQuery("content", name))
+                .withQuery(simpleQueryStringQuery(name))
                 .withFilter(rangeBuilder)
                 .withPageable(pageable)
                 .build()

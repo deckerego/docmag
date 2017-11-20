@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-import java.text.DateFormat
-
 @Controller
 @RequestMapping("/search")
 class SearchController {
@@ -27,7 +25,7 @@ class SearchController {
 
     @GetMapping
     def search(Model model,
-               @RequestParam(name = "query", required = false, defaultValue = "") String query,
+               @RequestParam(name = "query", required = false, defaultValue = "*") String query,
                @RequestParam(name = "startTime", required = false)
                    @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
                @RequestParam(name = "endTime", required = false)
@@ -52,6 +50,7 @@ class SearchController {
         int totalPages = results.totalElements <= 0 ? 1 : Math.ceil(results.totalElements / pageable.pageSize) as int
 
         model.addAttribute"results", results
+        model.addAttribute"type", "query"
         model.addAttribute"totalDocs", repository.documentCount()
         model.addAttribute"totalPages", totalPages > 20 ? 20 : totalPages
         model.addAttribute"currentPage", pageNumber + 1

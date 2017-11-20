@@ -57,13 +57,14 @@ class SearchControllerTests {
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([])
         given(this.results.getTotalElements()).willReturn(0L)
-        given(this.repository.findByContent(eq(""), any(), any(), any())).willReturn(this.results)
+        given(this.repository.findByContent(eq("*"), any(), any(), any())).willReturn(this.results)
         given(this.repository.documentCount()).willReturn(10L)
 
         this.mvc.perform(get("/search")
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("query", is("")))
+                .andExpect(model().attribute("query", is("*")))
+                .andExpect(model().attribute("type", is("query")))
                 .andExpect(model().attribute("results", hasProperty("content")))
                 .andExpect(model().attribute("totalPages", is(1)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
@@ -74,7 +75,7 @@ class SearchControllerTests {
 
     @Test
     @WithMockUser
-    void defaultSearch() {
+    void defaultQuery() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new File(lastModified: Calendar.instance.time)
         result.path = new Path(virtual: "/no/where")
@@ -90,6 +91,7 @@ class SearchControllerTests {
                 .accept(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("query", is("inputText")))
+                .andExpect(model().attribute("type", is("query")))
                 .andExpect(model().attribute("results", hasProperty("content")))
                 .andExpect(model().attribute("totalPages", is(1)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
@@ -100,7 +102,7 @@ class SearchControllerTests {
 
     @Test
     @WithMockUser
-    void paginatedSearch() {
+    void paginatedQuery() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
         result.file = new File(lastModified: Calendar.instance.time)
         result.path = new Path(virtual: "/no/where")
@@ -117,6 +119,7 @@ class SearchControllerTests {
                 .accept(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("query", is("inputText")))
+                .andExpect(model().attribute("type", is("query")))
                 .andExpect(model().attribute("results", hasProperty("content")))
                 .andExpect(model().attribute("totalPages", is(2)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
@@ -148,6 +151,7 @@ class SearchControllerTests {
                 .accept(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("query", is("inputText")))
+                .andExpect(model().attribute("type", is("query")))
                 .andExpect(model().attribute("results", hasProperty("content")))
                 .andExpect(model().attribute("totalPages", is(2)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
