@@ -13,8 +13,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery
-import static org.elasticsearch.index.query.QueryBuilders.rangeQuery
+import static org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
 
 @Repository
 class ScannedRepository {
@@ -28,22 +27,8 @@ class ScannedRepository {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withIndices("scanned")
-                .withQuery(matchQuery("content", name))
+                .withQuery(simpleQueryStringQuery(name))
                 .withFilter(rangeBuilder)
-                .withPageable(pageable)
-                .build()
-
-        elasticsearchTemplate.queryForPage searchQuery, ScannedDoc.class
-    }
-
-    Page<ScannedDoc> findByDate(Date startTime, Date endTime, Pageable pageable) {
-        RangeQueryBuilder rangeBuilder = new RangeQueryBuilder("file.last_modified")
-                .from(startTime.format("yyyy-MM-dd'T'HH:mm:ssZ"))
-                .to(endTime.format("yyyy-MM-dd'T'HH:mm:ssZ"))
-
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withIndices("scanned")
-                .withQuery(rangeBuilder)
                 .withPageable(pageable)
                 .build()
 

@@ -24,13 +24,8 @@ class SearchController {
     DocConfig docConfig
 
     @GetMapping
-    def index() {
-        "redirect:/search/list"
-    }
-
-    @GetMapping("/query")
     def search(Model model,
-               @RequestParam(name = "query", required = false) String query,
+               @RequestParam(name = "query", required = false, defaultValue = "*") String query,
                @RequestParam(name = "startTime", required = false)
                    @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
                @RequestParam(name = "endTime", required = false)
@@ -60,40 +55,6 @@ class SearchController {
         model.addAttribute"totalPages", totalPages > 20 ? 20 : totalPages
         model.addAttribute"currentPage", pageNumber + 1
         model.addAttribute"query", query
-        model.addAttribute"startTime", startTime.format("yyyy-MM-dd")
-        model.addAttribute"endTime", endTime.format("yyyy-MM-dd")
-        "search"
-    }
-
-    @GetMapping("/list")
-    def list(Model model,
-               @RequestParam(name = "startTime", required = false)
-               @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
-               @RequestParam(name = "endTime", required = false)
-               @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
-               @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber) {
-
-        if(! startTime) startTime = Calendar.getInstance().time - 7
-        if(! endTime) endTime = Calendar.getInstance().time
-
-        PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "_score", "file.last_modified")
-        Page<ScannedDoc> results = repository.findByDate startTime, endTime + 1, pageable
-
-        results.content.each { doc ->
-            if(doc.content) {
-                int maxlen = doc.content.size() < 450 ? doc.content.size() : 450
-                doc.content = doc.content.substring(0, maxlen)
-            }
-        }
-
-        int totalPages = results.totalElements <= 0 ? 1 : Math.ceil(results.totalElements / pageable.pageSize) as int
-
-        model.addAttribute"results", results
-        model.addAttribute"type", "list"
-        model.addAttribute"totalDocs", repository.documentCount()
-        model.addAttribute"totalPages", totalPages > 20 ? 20 : totalPages
-        model.addAttribute"currentPage", pageNumber + 1
-        model.addAttribute"query", ""
         model.addAttribute"startTime", startTime.format("yyyy-MM-dd")
         model.addAttribute"endTime", endTime.format("yyyy-MM-dd")
         "search"
