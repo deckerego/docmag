@@ -4,22 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.Document
 
-@Document(indexName = "scanned", type = "doc")
+@Document(indexName = "docidx", type = "fileentry")
 class ScannedDoc {
     @Id
     String id
-    String content
-    File file
-    Path path
+    Metadata metadata
+    String parentPath
+    String fileName
+    Date lastModified
+    String body
 
-    static class File {
-        @JsonProperty("last_modified")
-        Date lastModified
-        @JsonProperty("content_type")
+    static class Metadata {
+        @JsonProperty("Content-Type")
         String contentType
-    }
-
-    static class Path {
-        String virtual
     }
 }

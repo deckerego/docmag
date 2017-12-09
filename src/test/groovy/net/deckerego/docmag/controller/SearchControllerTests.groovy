@@ -3,8 +3,6 @@ package net.deckerego.docmag
 import net.deckerego.docmag.configuration.DocConfig
 import net.deckerego.docmag.controller.SearchController
 import net.deckerego.docmag.model.ScannedDoc
-import net.deckerego.docmag.model.ScannedDoc.File
-import net.deckerego.docmag.model.ScannedDoc.Path
 import net.deckerego.docmag.repository.ScannedRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -76,9 +74,7 @@ class SearchControllerTests {
     @Test
     @WithMockUser
     void defaultQuery() {
-        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new File(lastModified: Calendar.instance.time)
-        result.path = new Path(virtual: "/no/where")
+        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
 
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])
@@ -103,9 +99,7 @@ class SearchControllerTests {
     @Test
     @WithMockUser
     void paginatedQuery() {
-        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new File(lastModified: Calendar.instance.time)
-        result.path = new Path(virtual: "/no/where")
+        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
 
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])
@@ -133,9 +127,7 @@ class SearchControllerTests {
     void startEndTime() {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
-        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new File(lastModified: Calendar.instance.time)
-        result.path = new Path(virtual: "/no/where")
+        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
 
         given(this.docConfig.getPagesize()).willReturn(1)
         given(this.results.getContent()).willReturn([result])
