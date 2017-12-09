@@ -13,6 +13,6 @@ class LocalFileService {
         //TODO Add more security constraints to file fetching
         if(relativeName.contains(".."))
             throw new SecurityException("Cannot load paths with backward traversals")
-        new File(docConfig.root, relativeName)
+        new File(relativeName)
     }
 }
