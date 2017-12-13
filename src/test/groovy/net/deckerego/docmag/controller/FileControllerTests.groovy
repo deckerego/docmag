@@ -53,7 +53,7 @@ class FileControllerTests {
     @Test
     @WithMockUser
     void fetch() {
-        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
+        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
         result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
 
         given(this.fileSvc.fetchFile("/no/where")).willReturn(new File("src/test/docs/test.pdf"))
@@ -69,7 +69,7 @@ class FileControllerTests {
     @Test
     @WithMockUser
     void thumbnail() {
-        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
+        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
         result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
 
         def testFile = new File(System.getProperty("user.dir"),"src/test/docs/test.pdf")

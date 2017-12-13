@@ -16,6 +16,17 @@ Usually you won't want to build and run docidx locally, instead it is best to
 run the docker container published at: https://hub.docker.com/r/deckerego/docmagui/ 
 
 
+## Installing
+
+You can install docmag and its dependencies (including Elasticsearch) using just the 
+docker-compose.yml file by downloading it and executing:
+
+    docker-compose
+
+This should bring up docmag's user interface and Elasticsearch indexes, while also
+indexing new documents in the background. By default the web application is running
+locally on port 1080.
+
 ## Building and Testing Locally
 
 Building the app and its necessary infrastructure locally is performed with
