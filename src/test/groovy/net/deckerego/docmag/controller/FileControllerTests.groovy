@@ -5,7 +5,7 @@ import net.deckerego.docmag.controller.FileController
 import net.deckerego.docmag.model.ScannedDoc
 import net.deckerego.docmag.repository.ScannedRepository
 import net.deckerego.docmag.service.LocalFileService
-import net.deckerego.docmag.service.ThumbnailService
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -37,9 +37,6 @@ class FileControllerTests {
     private LocalFileService fileSvc
 
     @MockBean
-    private ThumbnailService thumbSvc
-
-    @MockBean
     private DocConfig docConfig
 
     @Test
@@ -69,20 +66,18 @@ class FileControllerTests {
     @Test
     @WithMockUser
     void thumbnail() {
-        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
-        result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
-
         def testFile = new File(System.getProperty("user.dir"),"src/test/docs/test.pdf")
         def testImage = new BufferedImage(320, 240, BufferedImage.TYPE_INT_RGB)
 
+        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where", thumbnail: testImage)
+        result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
+
         given(this.fileSvc.fetchFile("/no/where")).willReturn(testFile)
-        given(this.thumbSvc.render(testFile, "application/pdf", 0.5)).willReturn(testImage)
         given(this.repository.findById("feedfacedeadbeef")).willReturn(result)
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
 
         this.mvc.perform(get("/read/thumbnail")
                 .param("id", "feedfacedeadbeef")
-                .param("scale", "0.5")
                 .accept(MediaType.IMAGE_PNG))
                 .andExpect(status().isOk())
     }
