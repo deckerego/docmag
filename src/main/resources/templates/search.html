@@ -82,16 +82,16 @@
             <div class="list-group">
                 <div class="media list-group-item" th:each="document : ${results.content}">
                     <div class="media-body">
-                        <h3 class="list-group-item-heading" th:text="${document.file.lastModified}"></h3>
+                        <h3 class="list-group-item-heading" th:text="${document.lastModified}"></h3>
                         <a th:href="@{/read(id=${document.id})}" target="_blank">
-                            <h4 class="list-group-item-text" th:text="${document.path.virtual}"></h4>
+                            <h4 class="list-group-item-text" th:text="${document.fileName}"></h4>
                         </a>
-                        <p th:text="${document.content}"></p>
+                        <p th:text="${document.body}"></p>
                     </div>
 
                     <div class="media-left media-top">
                         <a th:href="@{/read(id=${document.id})}" target="_blank">
-                            <img class="media-object" width="300" height="200" th:src="@{/read/thumbnail(id=${document.id})}" th:alt="${document.path.virtual}"/>
+                            <img class="media-object" width="300" height="200" th:src="@{/read/thumbnail(id=${document.id})}" th:alt="${document.fileName}"/>
                         </a>
                     </div>
                 </div>

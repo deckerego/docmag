@@ -1,6 +1,6 @@
 # DocMag
 
-DocMag bundles together Elasticsearch and FS Crawler together using Docker
+DocMag bundles together Elasticsearch and DocIndex using Docker
 to make searching across documents simple and efficient.
 
 
@@ -9,10 +9,25 @@ to make searching across documents simple and efficient.
 On your target OS, ensure docker-ce is installed along with Docker Compose:
 
 https://docs.docker.com/engine/installation/
+
 https://docs.docker.com/compose/install/
 
+Usually you won't want to build and run docidx locally, instead it is best to 
+run the docker container published at: https://hub.docker.com/r/deckerego/docmagui/ 
 
-## Building & Testing Locally
+
+## Installing
+
+You can install docmag and its dependencies (including Elasticsearch) using just the 
+docker-compose.yml file by downloading it and executing:
+
+    docker-compose
+
+This should bring up docmag's user interface and Elasticsearch indexes, while also
+indexing new documents in the background. By default the web application is running
+locally on port 1080.
+
+## Building and Testing Locally
 
 Building the app and its necessary infrastructure locally is performed with
 Maven and `docker-compose`.
@@ -28,7 +43,7 @@ To compose the necessary containers and configure Elasticsearch indexes:
     ./configure.sh
 
 The development instance of the composition config will expose Elasticsearch,
-Spring Boot, fscrawler and Kibana to local ports - so don't use this in a
+Spring Boot, and Kibana to local ports - so don't use this in a
 production setting.
 
 This should build & run the necessary containers, then begin indexing documents
@@ -38,7 +53,7 @@ metadata generated from these containers, execute:
     docker-compose -f docker-compose.yml -f docker-compose-devel.yml down -v
 
 
-## Searching & Querying Documents
+## Searching and Querying Documents
 
 To search within your documents, view thumbnails and open the full document
 navigate to `http://localhost:1080`. This should take you to the main search

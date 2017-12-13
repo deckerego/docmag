@@ -53,9 +53,8 @@ class FileControllerTests {
     @Test
     @WithMockUser
     void fetch() {
-        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new ScannedDoc.File(lastModified: Calendar.instance.time, contentType: "application/pdf")
-        result.path = new ScannedDoc.Path(virtual: "/no/where")
+        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
+        result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
 
         given(this.fileSvc.fetchFile("/no/where")).willReturn(new File("src/test/docs/test.pdf"))
         given(this.repository.findById("feedfacedeadbeef")).willReturn(result)
@@ -70,9 +69,8 @@ class FileControllerTests {
     @Test
     @WithMockUser
     void thumbnail() {
-        def result = new ScannedDoc(id: "feedfacedeadbeef", content: "nothing")
-        result.file = new ScannedDoc.File(lastModified: Calendar.instance.time, contentType: "application/pdf")
-        result.path = new ScannedDoc.Path(virtual: "/no/where")
+        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
+        result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
 
         def testFile = new File(System.getProperty("user.dir"),"src/test/docs/test.pdf")
         def testImage = new BufferedImage(320, 240, BufferedImage.TYPE_INT_RGB)

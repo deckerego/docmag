@@ -21,13 +21,12 @@ class ScannedRepository {
     ElasticsearchOperations elasticsearchTemplate
 
     Page<ScannedDoc> findByContent(String name, Date startTime, Date endTime, Pageable pageable) {
-        RangeQueryBuilder rangeBuilder = new RangeQueryBuilder("file.last_modified")
-                .from(startTime.format("yyyy-MM-dd'T'HH:mm:ssZ"))
-                .to(endTime.format("yyyy-MM-dd'T'HH:mm:ssZ"))
+        RangeQueryBuilder rangeBuilder = new RangeQueryBuilder("lastModified")
+                .from(startTime.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
+                .to(endTime.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withIndices("scanned")
-                .withQuery(simpleQueryStringQuery(name))
+                .withQuery(simpleQueryStringQuery(name).field("body"))
                 .withFilter(rangeBuilder)
                 .withPageable(pageable)
                 .build()
@@ -46,7 +45,7 @@ class ScannedRepository {
         IndicesStatsResponse response = elasticsearchTemplate.client
                 .admin()
                 .indices()
-                .prepareStats("scanned")
+                .prepareStats("docidx")
                 .setDocs(true)
                 .get()
 

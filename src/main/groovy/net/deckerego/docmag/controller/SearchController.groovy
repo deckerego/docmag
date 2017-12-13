@@ -35,15 +35,15 @@ class SearchController {
         if(! startTime) startTime = Calendar.getInstance().time - 7
         if(! endTime) endTime = Calendar.getInstance().time
 
-        PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "_score", "file.last_modified")
+        PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "_score", "lastModified")
         Page<ScannedDoc> results = repository.findByContent query, startTime, endTime + 1, pageable
 
         results.content.each { doc ->
-            if(doc.content) {
-                int idx = doc.content.indexOf(query)
+            if(doc.body) {
+                int idx = doc.body.indexOf(query)
                 int minlen = idx < 50 ? 0 : idx - 50
-                int maxlen = doc.content.size() < idx + 400 ? doc.content.size() : idx + 400
-                doc.content = doc.content.substring(minlen, maxlen)
+                int maxlen = doc.body.size() < idx + 400 ? doc.body.size() : idx + 400
+                doc.body = doc.body.substring(minlen, maxlen)
             }
         }
 

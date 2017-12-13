@@ -38,10 +38,10 @@ class FileController {
               @RequestParam(value="id", required=true) String id) {
         ScannedDoc scanDoc = repository.findById id
 
-        InputStream is = new FileInputStream(fileSvc.fetchFile(scanDoc.path.virtual))
+        InputStream is = new FileInputStream(fileSvc.fetchFile("${scanDoc.parentPath}/${scanDoc.fileName}"))
 
         OutputStream os = response.getOutputStream()
-        response.setContentType scanDoc.file.contentType
+        response.setContentType scanDoc.metadata.contentType
         IOUtils.copy is, os
         response.flushBuffer()
     }
@@ -51,9 +51,9 @@ class FileController {
               @RequestParam(value="id", required=true) String id,
               @RequestParam(value="scale", required=false, defaultValue="0.5") BigDecimal scale) {
         ScannedDoc scanDoc = repository.findById id
-        File file = fileSvc.fetchFile scanDoc.path.virtual
+        File file = fileSvc.fetchFile "${scanDoc.parentPath}/${scanDoc.fileName}"
 
-        Image image = thumbSvc.render(file, scanDoc.file.contentType, scale)
+        Image image = thumbSvc.render(file, scanDoc.metadata.contentType, scale)
 
         OutputStream os = response.getOutputStream()
         response.setContentType MediaType.IMAGE_PNG_VALUE

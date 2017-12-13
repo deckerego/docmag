@@ -34,7 +34,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser(username)
-                .password(password)
+                .password("{noop}"+password) //FIXME needs to be encoded for Spring Security 5
                 .roles("USER")
     }
 }

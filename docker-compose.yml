@@ -18,18 +18,20 @@ services:
     networks:
       - esnet
 
-  fscrawler:
-    image: deckerego/fscrawler
-    container_name: fscrawler
+  docidx:
+    image: deckerego/docidx
+    container_name: docidx
     depends_on: [ elasticsearch ]
-    #FIXME See Docker Compose Issue #3140
-    entrypoint: ./bin/launch_wait.sh elasticsearch01 9200
-    command: ./bin/fscrawler --config_dir /etc/fscrawler scanned --rest
     environment:
-      - "FS_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "FS_JAVA_OPTS=-Xms2g -Xmx4g"
+      - CRAWLER_ROOTPATH=/usr/share/docidx/docs
+      - ELASTICSEARCH_HOST=elasticsearch01
+      - ELASTICSEARCH_PORT=9300
+      - ELASTICSEARCH_CLUSTER=docmag-cluster
+      - ELASTICSEARCH_BATCHSIZE=10
+      - ELASTICSEARCH_BATCHWAITMILLIS=10000
     volumes:
-      - ${DOCUMENT_HOST_DIR}:/usr/share/fscrawler/docs:ro
-      - fscconfig:/etc/fscrawler
+      - ${DOCUMENT_HOST_DIR}:/usr/share/docidx/docs:ro
     networks:
       - esnet
 
