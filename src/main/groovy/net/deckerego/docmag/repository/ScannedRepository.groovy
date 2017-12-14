@@ -4,7 +4,6 @@ import net.deckerego.docmag.model.ScannedDoc
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse
 import org.elasticsearch.index.query.RangeQueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.domain.Pageable
@@ -40,7 +39,6 @@ class ScannedRepository {
         elasticsearchTemplate.queryForObject searchQuery, ScannedDoc.class
     }
 
-    @Cacheable("scannedIndexCount")
     long documentCount() {
         IndicesStatsResponse response = elasticsearchTemplate.client
                 .admin()
