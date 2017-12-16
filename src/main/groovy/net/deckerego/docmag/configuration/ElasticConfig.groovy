@@ -2,7 +2,7 @@ package net.deckerego.docmag.configuration
 
 import org.elasticsearch.client.Client
 import org.elasticsearch.common.settings.Settings
-import org.elasticsearch.common.transport.InetSocketTransportAddress
+import org.elasticsearch.common.transport.TransportAddress
 import org.elasticsearch.transport.client.PreBuiltTransportClient
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -25,7 +25,7 @@ class ElasticConfig {
                 .put("cluster.name", cluster)
                 .build()
         Client client = new PreBuiltTransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port))
+                .addTransportAddress(new TransportAddress(InetAddress.getByName(host), port))
         new ElasticsearchTemplate(client)
     }
 }
