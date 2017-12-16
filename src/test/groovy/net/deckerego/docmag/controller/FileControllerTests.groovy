@@ -51,7 +51,7 @@ class FileControllerTests {
     @WithMockUser
     void fetch() {
         def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
-        result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
+        result.metadata = ["Content-Type": "application/pdf"]
 
         given(this.fileSvc.fetchFile("/no/where")).willReturn(new File("src/test/docs/test.pdf"))
         given(this.repository.findById("feedfacedeadbeef")).willReturn(result)
@@ -70,7 +70,7 @@ class FileControllerTests {
         def testImage = new BufferedImage(320, 240, BufferedImage.TYPE_INT_RGB)
 
         def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where", thumbnail: testImage)
-        result.metadata = new ScannedDoc.Metadata(contentType: "application/pdf")
+        result.metadata = ["Content-Type": "application/pdf"]
 
         given(this.fileSvc.fetchFile("/no/where")).willReturn(testFile)
         given(this.repository.findById("feedfacedeadbeef")).willReturn(result)

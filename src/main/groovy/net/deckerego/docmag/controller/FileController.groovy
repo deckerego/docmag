@@ -34,7 +34,7 @@ class FileController {
         InputStream is = new FileInputStream(fileSvc.fetchFile("${scanDoc.parentPath}/${scanDoc.fileName}"))
 
         OutputStream os = response.getOutputStream()
-        response.setContentType scanDoc.metadata.contentType
+        response.setContentType scanDoc.metadata["Content-Type"]
         IOUtils.copy is, os
         response.flushBuffer()
     }

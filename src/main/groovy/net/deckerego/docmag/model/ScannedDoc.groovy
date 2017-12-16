@@ -15,17 +15,12 @@ import java.awt.image.BufferedImage
 class ScannedDoc {
     @Id
     String id
-    Metadata metadata
+    Map metadata
     String parentPath
     String fileName
     Date lastModified
     BufferedImage thumbnail
     String body
-
-    static class Metadata {
-        @JsonProperty("Content-Type")
-        String contentType
-    }
 
     @JsonGetter("thumbnail")
     byte[] getThumbnailBytes() {
