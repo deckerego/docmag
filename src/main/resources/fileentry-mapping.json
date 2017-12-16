@@ -1,0 +1,28 @@
+{
+  "fileentry": {
+    "properties": {
+      "parentPath": {
+        "type": "keyword"
+      },
+      "fileName": {
+        "type": "keyword"
+      },
+      "parentPath": {
+        "type": "keyword"
+      },
+      "lastModified": {
+        "type": "date"
+      },
+      "body": {
+        "type": "text",
+        "analyzer": "phonetic"
+      },
+      "metadata": {
+        "type": "object"
+      },
+      "thumbnail": {
+        "type": "binary"
+      }
+    }
+  }
+}
