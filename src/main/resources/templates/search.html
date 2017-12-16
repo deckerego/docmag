@@ -86,14 +86,7 @@
                         <a th:href="@{/read(id=${document.id})}" target="_blank">
                             <h4 class="list-group-item-text" th:text="${document.fileName}"></h4>
                         </a>
-                        <table class="table">
-                            <tbody>
-                                <tr th:each="entry : ${document.metadata}">
-                                    <td th:text="${entry.key}"></td>
-                                    <td th:text="${entry.value}"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <p th:text="${document.body}"></p>
                     </div>
 
                     <div class="media-left media-top">
