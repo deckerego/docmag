@@ -86,8 +86,16 @@
 		</dependency>
 	</dependencies>
 
-	<!-- If you are using IntelliJ's IDEA, make sure to exclude target/generated-sources/groovy-stubs/* -->
 	<build>
+		<resources>
+			<resource>
+				<directory>target/generated-sources</directory>
+				<excludes>
+					<exclude>groovy-stubs/**</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

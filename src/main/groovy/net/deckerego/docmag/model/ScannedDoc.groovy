@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSetter
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.Document
+import org.springframework.data.elasticsearch.annotations.Mapping
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
 @Document(indexName = "docidx", type = "fileentry")
+@Mapping(mappingPath = "fileentry-mapping.json")
 class ScannedDoc {
     @Id
     String id
