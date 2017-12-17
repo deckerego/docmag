@@ -21,7 +21,11 @@ run the docker container published at: https://hub.docker.com/r/deckerego/docmag
 You can install docmag and its dependencies (including Elasticsearch) using just the
 docker-compose.yml file by downloading it and executing:
 
-    docker-compose up -d
+    export DOCUMENT_HOST_DIR=/Volumes/Scanned && docker-compose up -d
+
+Where the value of `DOCUMENT_HOST_DIR` is the directory you would like to scan and
+index for searching within docmag. So `DOCUMENT_HOST_DIR=/tmp/fs` would recursively
+search within the directory `/tmp/fs`.
 
 This should bring up docmag's user interface and Elasticsearch indexes, while also
 indexing new documents in the background. By default the web application is running

@@ -32,7 +32,7 @@ class SearchController {
                    @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
                @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber) {
 
-        if(! startTime) startTime = Calendar.getInstance().time - 7
+        if(! startTime) startTime = Calendar.getInstance().time - 365
         if(! endTime) endTime = Calendar.getInstance().time
 
         PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "_score", "lastModified")
