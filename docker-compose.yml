@@ -19,7 +19,7 @@ services:
     container_name: docidx
     depends_on: [ elasticsearch ]
     environment:
-      - "FS_JAVA_OPTS=-Xms2g -Xmx4g"
+      - "FS_JAVA_OPTS=-Xms512m -Xmx1g"
       - CRAWLER_ROOTPATH=/usr/share/docidx/docs
       - ELASTICSEARCH_HOST=elasticsearch01
       - ELASTICSEARCH_PORT=9300
