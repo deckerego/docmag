@@ -21,7 +21,7 @@ run the docker container published at: https://hub.docker.com/r/deckerego/docmag
 You can install docmag and its dependencies (including Elasticsearch) using just the
 docker-compose.yml file by downloading it and executing:
 
-    export DOCUMENT_HOST_DIR=/Volumes/Scanned && docker-compose up -d
+    export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose up -d
 
 Where the value of `DOCUMENT_HOST_DIR` is the directory you would like to scan and
 index for searching within docmag. So `DOCUMENT_HOST_DIR=/tmp/fs` would recursively
@@ -36,13 +36,10 @@ locally on port 1080.
 Building the app and its necessary infrastructure locally is performed with
 Maven and `docker-compose`.
 
-Environment-specific details (like the directory of your documents) is stored
-within the `.env` file. Make sure to edit this file after cloning the repository.
-
 To compose the necessary containers and configure Elasticsearch indexes:
 
     mvn install
-    docker-compose -f docker-compose.yml -f docker-compose-devel.yml up -d
+    export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose -f docker-compose.yml -f docker-compose-devel.yml up -d
     cd es/
     ./configure.sh
 
@@ -51,10 +48,10 @@ Spring Boot, and Kibana to local ports - so don't use this in a
 production setting.
 
 This should build & run the necessary containers, then begin indexing documents
-from the directory specified in `.env`. To shut down and delete the Elasticsearch
-metadata generated from these containers, execute:
+from the directory specified as `DOCUMENT_HOST_DIR`. To shut down and delete the
+Elasticsearch metadata generated from these containers, execute:
 
-    docker-compose -f docker-compose.yml -f docker-compose-devel.yml down -v
+    export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose -f docker-compose.yml -f docker-compose-devel.yml down -v
 
 
 ## Searching and Querying Documents
