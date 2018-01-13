@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.*
 
 @RunWith(SpringRunner)
 @SpringBootTest
-class LocalFileServiceTest {
+class LocalFileServiceTests {
 
     @MockBean
     private DocConfig docConfig

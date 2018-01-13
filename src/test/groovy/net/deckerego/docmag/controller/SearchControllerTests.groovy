@@ -43,7 +43,7 @@ class SearchControllerTests {
     private Page<ScannedDoc> results
 
     @Test
-    void unauthenticated() {
+    void  unauthenticated() {
         this.mvc.perform(get("/search")
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
