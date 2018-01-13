@@ -18,22 +18,29 @@
         <h1>Document Tagging</h1>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div id="documentWell" class="well">
-                <img id="coverImage" th:src="@{/tagging/cover/(id=${id})}" alt="Document Image for Tagging"/>
+    <form th:action="@{/tagging/save}" method="POST">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="documentWell" class="well">
+                    <img id="coverImage" th:src="@{/tagging/cover/(id=${id})}" alt="Document Image for Tagging"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group" style="padding-bottom: 10px">
+                    <input id="templateName" name="name" type="text" class="form-control" placeholder="Tag Name" th:value="${name}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Save</button>
+                    </span>
+                </div>
+                <div id="previewWell" class="well"><canvas id="templatePreview"></canvas></div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="input-group" style="padding-bottom: 10px">
-                <input id="tagName" type="text" class="form-control" placeholder="Tag Name">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="saveTemplate();">Save</button>
-                </span>
-            </div>
-            <div id="previewWell" class="well"><canvas id="templatePreview"></canvas></div>
-        </div>
-    </div>
+        <input type="hidden" id="documentId" name="id" th:value="${id}"/>
+        <input type="hidden" id="templateX" name="xPos" th:value="${xPos}"/>
+        <input type="hidden" id="templateY" name="yPos" th:value="${yPos}"/>
+        <input type="hidden" id="templateWidth" name="width" th:value="${width}"/>
+        <input type="hidden" id="templateHeight" name="height" th:value="${height}"/>
+    </form>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>

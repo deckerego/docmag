@@ -1,5 +1,3 @@
-var templateRegion = { "x1": 0, "y1": 0, "width": 0, "height": 0 }
-
 function previewSelect(image, selection) {
     var previewCanvas = document.getElementById('templatePreview');
     var canvasContext = previewCanvas.getContext('2d');
@@ -9,11 +7,10 @@ function previewSelect(image, selection) {
 }
 
 function saveSelect(image, selection) {
-    templateRegion = selection;
+    $('#templateX').val(selection.x1);
+    $('#templateY').val(selection.y1);
+    $('#templateWidth').val(selection.width);
+    $('#templateHeight').val(selection.height);
 }
 
-function saveTemplate() {
-    var name = $('#tagName').val();
-    alert("Saving "+name+" at ("+templateRegion.x1+", "+templateRegion.y1+")");
-}
 

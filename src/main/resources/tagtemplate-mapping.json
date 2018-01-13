@@ -1,0 +1,15 @@
+{
+  "tagtemplate": {
+    "properties": {
+      "name": {
+        "type": "keyword"
+      },
+      "template": {
+        "type": "binary"
+      },
+      "sourceDocument": {
+        "type": "object"
+      }
+    }
+  }
+}
