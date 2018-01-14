@@ -78,7 +78,7 @@ class TaggingController {
         String contentType = scanDoc.metadata["Content-Type"]
         Image image = imageService.render(file, contentType, 1.0)
 
-        TagTemplate tagTemplate = new TagTemplate(name: name)
+        TagTemplate tagTemplate = new TagTemplate(name: name, indexUpdated: Calendar.getInstance().getTime())
         tagTemplate.template = image.getSubimage xPos, yPos, width, height
         tagTemplate.sourceDocument = new TagTemplate.SourceDoc(id: id, xPos: xPos, yPos: yPos)
 

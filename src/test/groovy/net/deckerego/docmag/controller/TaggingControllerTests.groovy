@@ -2,7 +2,9 @@ package net.deckerego.docmag.controller
 
 import net.deckerego.docmag.configuration.DocConfig
 import net.deckerego.docmag.model.ScannedDoc
+import net.deckerego.docmag.model.TagTemplate
 import net.deckerego.docmag.repository.ScannedRepository
+import net.deckerego.docmag.repository.TagTemplateRepository
 import net.deckerego.docmag.service.ImageService
 import net.deckerego.docmag.service.LocalFileService
 import org.junit.Test
@@ -36,6 +38,9 @@ class TaggingControllerTests {
     ScannedRepository scannedRepository
 
     @MockBean
+    TagTemplateRepository tagTemplateRepository
+
+    @MockBean
     LocalFileService localFileService
 
     @MockBean
@@ -64,6 +69,36 @@ class TaggingControllerTests {
 
         this.mvc.perform(get("/tagging/cover")
                 .param("id", "feedfacedeadbeef")
+                .accept(MediaType.IMAGE_PNG))
+                .andExpect(status().isOk())
+    }
+
+    @Test
+    @WithMockUser
+    void save() {
+        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where")
+        result.metadata = ["Content-Type": "application/pdf"]
+
+        def testFile = new File(System.getProperty("user.dir"),"src/test/docs/test.pdf")
+        def testImage = new BufferedImage(320, 240, BufferedImage.TYPE_INT_RGB)
+
+        TagTemplate savedTemplate = new TagTemplate(name: "test")
+        savedTemplate.template = testImage
+        savedTemplate.sourceDocument = new TagTemplate.SourceDoc(id: "feedfacedeadbeef", xPos: 10, yPos: 10)
+
+        given(this.localFileService.fetchFile("/no/where")).willReturn(testFile)
+        given(this.imageService.render(testFile, "application/pdf", 1.0)).willReturn(testImage)
+        given(this.scannedRepository.findById("feedfacedeadbeef")).willReturn(result)
+        given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
+        given(this.tagTemplateRepository.save(any(TagTemplate.class))).willReturn(savedTemplate)
+
+        this.mvc.perform(post("/tagging/save")
+                .param("id", "feedfacedeadbeef")
+                .param("name", "test")
+                .param("xPos", "10")
+                .param("yPos", "10")
+                .param("width", "100")
+                .param("height", "20")
                 .accept(MediaType.IMAGE_PNG))
                 .andExpect(status().isOk())
     }

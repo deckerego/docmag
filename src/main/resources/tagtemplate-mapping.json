@@ -7,6 +7,9 @@
       "template": {
         "type": "binary"
       },
+      "indexUpdated": {
+        "type": "date"
+      },
       "sourceDocument": {
         "type": "object"
       }

@@ -5,17 +5,20 @@ import com.fasterxml.jackson.annotation.JsonSetter
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.Document
 import org.springframework.data.elasticsearch.annotations.Mapping
+import org.springframework.data.elasticsearch.annotations.Setting
 
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
 @Document(indexName = "docidx", type = "tagtemplate")
 @Mapping(mappingPath = "tagtemplate-mapping.json")
+@Setting(settingPath = "docidx-settings.json")
 class TagTemplate {
     @Id
     String id
     String name
     BufferedImage template
+    Date indexUpdated
     SourceDoc sourceDocument
 
     @JsonGetter("template")
