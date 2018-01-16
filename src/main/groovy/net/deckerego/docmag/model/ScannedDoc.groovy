@@ -22,6 +22,7 @@ class ScannedDoc {
     String fileName
     Date lastModified
     BufferedImage thumbnail
+    Set<Tag> tags
     String body
 
     @JsonGetter("thumbnail")
@@ -43,5 +44,10 @@ class ScannedDoc {
         } catch(IOException e) {
             this.thumbnail = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
         }
+    }
+
+    static class Tag {
+        public String name
+        public double score
     }
 }

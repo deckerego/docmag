@@ -5,6 +5,8 @@ import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse
 import org.elasticsearch.index.query.RangeQueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.domain.Pageable
 import org.springframework.data.elasticsearch.core.query.GetQuery
@@ -12,6 +14,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery
 import static org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
 
 @Repository
@@ -37,6 +40,20 @@ class ScannedRepository {
         GetQuery searchQuery = new GetQuery(id: id)
 
         elasticsearchTemplate.queryForObject searchQuery, ScannedDoc.class
+    }
+
+    Page<ScannedDoc> findByTag(String tag, Pageable pageable) {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(matchQuery("tags.name", tag))
+                .withPageable(pageable)
+                .build()
+
+        elasticsearchTemplate.queryForPage searchQuery, ScannedDoc.class
+    }
+
+    long tagCount(String tag) {
+        Page<ScannedDoc> page = findByTag tag, PageRequest.of(1, 1)
+        return page.totalElements
     }
 
     long documentCount() {

@@ -86,6 +86,17 @@
                         <a th:href="@{/read(id=${document.id})}" target="_blank">
                             <h4 class="list-group-item-text" th:text="${document.fileName}"></h4>
                         </a>
+                        <table class="table">
+                            <tr>
+                                <th colspan="2">
+                                    <a th:href="@{/tags/edit(id=${document.id})}">Add Document Tag</a>
+                                </th>
+                            </tr>
+                            <tr th:each="tag : ${document.tags}">
+                                <td th:text="${tag.name}"></td>
+                                <td th:text="${tag.score}"></td>
+                            </tr>
+                        </table>
                         <p th:text="${document.body}"></p>
                     </div>
 

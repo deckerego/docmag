@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage
 import static org.mockito.BDDMockito.*
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*
 
 @RunWith(SpringRunner)
 @WebMvcTest(TaggingController.class)
@@ -48,7 +49,7 @@ class TaggingControllerTests {
 
     @Test
     void unauthenticated() {
-        this.mvc.perform(get("/tagging")
+        this.mvc.perform(get("/tags")
                 .accept(MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
     }
@@ -67,7 +68,7 @@ class TaggingControllerTests {
         given(this.scannedRepository.findById("feedfacedeadbeef")).willReturn(result)
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
 
-        this.mvc.perform(get("/tagging/cover")
+        this.mvc.perform(get("/tags/cover")
                 .param("id", "feedfacedeadbeef")
                 .accept(MediaType.IMAGE_PNG))
                 .andExpect(status().isOk())
@@ -92,7 +93,8 @@ class TaggingControllerTests {
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
         given(this.tagTemplateRepository.save(any(TagTemplate.class))).willReturn(savedTemplate)
 
-        this.mvc.perform(post("/tagging/save")
+        this.mvc.perform(post("/tags/save")
+                .with(csrf())
                 .param("id", "feedfacedeadbeef")
                 .param("name", "test")
                 .param("xPos", "10")
@@ -100,7 +102,7 @@ class TaggingControllerTests {
                 .param("width", "100")
                 .param("height", "20")
                 .accept(MediaType.IMAGE_PNG))
-                .andExpect(status().isOk())
+                .andExpect(status().is3xxRedirection())
     }
 }
 

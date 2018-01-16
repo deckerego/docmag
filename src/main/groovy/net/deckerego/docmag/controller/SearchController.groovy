@@ -58,4 +58,38 @@ class SearchController {
         model.addAttribute"endTime", endTime.format("yyyy-MM-dd")
         "search"
     }
+
+    @GetMapping("/tag")
+    def findTag(Model model,
+               @RequestParam(name = "query", required = true) String tag,
+               @RequestParam(name = "startTime", required = false)
+                   @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,
+               @RequestParam(name = "endTime", required = false)
+                   @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
+               @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber) {
+
+        if(! startTime) startTime = Calendar.getInstance().time - 365
+        if(! endTime) endTime = Calendar.getInstance().time
+
+        PageRequest pageable = PageRequest.of(pageNumber, docConfig.pagesize, Sort.Direction.DESC, "_score", "lastModified")
+        Page<ScannedDoc> results = repository.findByTag tag, pageable
+
+        results.content.each { doc ->
+            if(doc.body) {
+                int maxlen = doc.body.size() < 400 ? doc.body.size() : 400
+                doc.body = doc.body.substring(0, maxlen)
+            }
+        }
+
+        int totalPages = results.totalElements <= 0 ? 1 : Math.ceil(results.totalElements / pageable.pageSize) as int
+
+        model.addAttribute"results", results
+        model.addAttribute"totalDocs", repository.documentCount()
+        model.addAttribute"totalPages", totalPages > 20 ? 20 : totalPages
+        model.addAttribute"currentPage", pageNumber + 1
+        model.addAttribute"query", tag
+        model.addAttribute"startTime", startTime.format("yyyy-MM-dd")
+        model.addAttribute"endTime", endTime.format("yyyy-MM-dd")
+        "search"
+    }
 }

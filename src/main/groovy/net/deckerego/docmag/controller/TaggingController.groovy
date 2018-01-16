@@ -11,9 +11,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
@@ -22,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
 import java.awt.Image
 
 @Controller
-@RequestMapping("/tagging")
+@RequestMapping("/tags")
 class TaggingController {
 
     @Autowired
@@ -38,6 +36,16 @@ class TaggingController {
     LocalFileService localFileService
 
     @GetMapping
+    def tagging(Model model) {
+        Iterable<TagTemplate> templates = tagTemplateRepository.findAll()
+
+        templates.each { it.count = scannedRepository.tagCount(it.name) }
+
+        model.addAttribute"results", templates.sort { -it.count }
+        "tags"
+    }
+
+    @GetMapping("/edit")
     def tagging(Model model,
         @RequestParam(value="id", required=true) String id) {
         model.addAttribute"id", id
@@ -47,7 +55,7 @@ class TaggingController {
         model.addAttribute"width", 0
         model.addAttribute"height", 0
 
-        "tagging"
+        "edittag"
     }
 
     @GetMapping("/cover")
@@ -91,6 +99,6 @@ class TaggingController {
         model.addAttribute"width", width
         model.addAttribute"height", height
 
-        "tagging"
+        "redirect:/search"
     }
 }

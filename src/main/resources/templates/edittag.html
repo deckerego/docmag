@@ -18,11 +18,11 @@
         <h1>Document Tagging</h1>
     </div>
 
-    <form th:action="@{/tagging/save}" method="POST">
+    <form th:action="@{/tags/save}" method="POST">
         <div class="row">
             <div class="col-md-6">
                 <div id="documentWell" class="well">
-                    <img id="coverImage" th:src="@{/tagging/cover/(id=${id})}" alt="Document Image for Tagging"/>
+                    <img id="coverImage" th:src="@{/tags/cover/(id=${id})}" alt="Document Image for Tagging"/>
                 </div>
             </div>
             <div class="col-md-6">

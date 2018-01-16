@@ -25,6 +25,9 @@
       },
       "thumbnail": {
         "type": "binary"
+      },
+      "tags": {
+        "type": "object"
       }
     }
   }

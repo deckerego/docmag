@@ -20,6 +20,7 @@ class TagTemplate {
     BufferedImage template
     Date indexUpdated
     SourceDoc sourceDocument
+    long count = 0L
 
     @JsonGetter("template")
     byte[] getThumbnailBytes() {
