@@ -27,6 +27,10 @@
                         <button class="btn btn-default" type="submit">Go!</button>
                     </span>
                 </div>
+                <div th:each="tag : ${tags}">
+                    <span class="label label-default" th:text="${tag}"></span>
+                    <input type="hidden" name="tag" th:value="${tag}">
+                </div>
             </div>
         </div>
 
@@ -58,13 +62,13 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:class="(1 eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} gt 1)? @{/search/(query=${query}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
+                        <a th:href="(${currentPage} gt 1)? @{/search/(query=${query}, tag=${tags}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search/(query=${query}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a></li>
+                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a></li>
                     <li th:class="(${totalPages} eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
+                        <a th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, tag=${tags}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

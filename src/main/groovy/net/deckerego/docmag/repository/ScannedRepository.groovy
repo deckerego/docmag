@@ -22,13 +22,20 @@ class ScannedRepository {
     @Autowired
     ElasticsearchOperations elasticsearchTemplate
 
-    Page<ScannedDoc> findByContent(String name, Date startTime, Date endTime, Pageable pageable) {
+    Page<ScannedDoc> findByContent(String name, Collection<String> tags, Date startTime, Date endTime, Pageable pageable) {
         RangeQueryBuilder rangeBuilder = new RangeQueryBuilder("lastModified")
                 .from(startTime.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
                 .to(endTime.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
 
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+        NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder()
                 .withQuery(simpleQueryStringQuery(name).field("body"))
+
+        for(String tag : tags) {
+            searchQueryBuilder = searchQueryBuilder
+                    .withQuery(matchQuery("tags.name", tag))
+        }
+
+        SearchQuery searchQuery = searchQueryBuilder
                 .withFilter(rangeBuilder)
                 .withPageable(pageable)
                 .build()

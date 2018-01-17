@@ -32,5 +32,6 @@ class LocalFileServiceTests {
     void backwardTraversal() {
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
         fileSvc.fetchFile("../../etc/passwd")
+        System.err.println("*** I SHOULD NOT BE ***")
     }
 }

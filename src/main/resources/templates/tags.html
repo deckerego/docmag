@@ -23,7 +23,7 @@
                 <tr th:each="tagtemplate : ${results}">
                     <td th:text="${tagtemplate.count}"></td>
                     <td>
-                        <a th:href="@{/search/tag(query=${tagtemplate.name})}" th:text="${tagtemplate.name}"></a>
+                        <a th:href="@{/search(tag=${tagtemplate.name})}" th:text="${tagtemplate.name}"></a>
                     </td>
                 </tr>
             </table>
