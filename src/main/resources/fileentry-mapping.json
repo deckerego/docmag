@@ -13,6 +13,9 @@
       "lastModified": {
         "type": "date"
       },
+      "indexUpdated": {
+        "type": "date"
+      },
       "body": {
         "type": "text",
         "analyzer": "phonetic"
@@ -22,6 +25,9 @@
       },
       "thumbnail": {
         "type": "binary"
+      },
+      "tags": {
+        "type": "object"
       }
     }
   }

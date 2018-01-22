@@ -2,26 +2,34 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Docmag Header</title>
+    <title>Docmag Search</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 
 <body>
 
-<nav class="navbar navbar-default navbar-static-top" role="navigation" th:fragment="header">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">DocMag</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/search">Search</a></li>
-                <li><a href="/tags">Tagging</a></li>
-            </ul>
+<div class="container">
+
+    <div th:replace="header :: header">&nbsp;</div>
+
+    <div class="page-header">
+        <h1>Browse by Tag</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10">
+            <table class="table">
+                <tr th:each="tagtemplate : ${results}">
+                    <td th:text="${tagtemplate.count}"></td>
+                    <td>
+                        <a th:href="@{/search(tag=${tagtemplate.name})}" th:text="${tagtemplate.name}"></a>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
-</nav>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

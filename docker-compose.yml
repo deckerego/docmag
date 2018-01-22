@@ -15,7 +15,7 @@ services:
       - esnet
 
   docidx:
-    image: deckerego/docidx
+    image: deckerego/docidx:0.2.0-SNAPSHOT
     container_name: docidx
     depends_on: [ elasticsearch ]
     environment:
@@ -32,7 +32,7 @@ services:
       - esnet
 
   docmagui:
-    image: deckerego/docmagui
+    image: deckerego/docmagui:0.2.0-SNAPSHOT
     container_name: docmagui
     environment:
       - ELASTICSEARCH_HOST=elasticsearch01

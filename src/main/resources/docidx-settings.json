@@ -1,0 +1,20 @@
+{
+  "index": {
+    "number_of_replicas": 0,
+    "analysis": {
+      "filter": {
+        "phonetic_filter": {
+          "type": "phonetic",
+          "encoder": "soundex",
+          "replace": false
+        }
+      },
+      "analyzer": {
+        "phonetic": {
+          "tokenizer": "standard",
+          "filter": [ "standard", "lowercase", "phonetic_filter"]
+        }
+      }
+    }
+  }
+}

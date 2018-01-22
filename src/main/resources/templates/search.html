@@ -18,7 +18,7 @@
         <h1>Document Search</h1>
     </div>
 
-    <form action="/search" method="GET">
+    <form th:action="@{/search}" method="GET">
         <div class="row">
             <div class="col-sm-8" style="padding-bottom: 10px">
                 <div class="input-group">
@@ -26,6 +26,10 @@
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit">Go!</button>
                     </span>
+                </div>
+                <div th:each="tag : ${tags}">
+                    <span class="label label-default" th:text="${tag}"></span>
+                    <input type="hidden" name="tag" th:value="${tag}">
                 </div>
             </div>
         </div>
@@ -58,13 +62,13 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:class="(1 eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} gt 1)? @{/search/(query=${query}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
+                        <a th:href="(${currentPage} gt 1)? @{/search/(query=${query}, tag=${tags}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search/(query=${query}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a></li>
+                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a></li>
                     <li th:class="(${totalPages} eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
+                        <a th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, tag=${tags}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -86,6 +90,17 @@
                         <a th:href="@{/read(id=${document.id})}" target="_blank">
                             <h4 class="list-group-item-text" th:text="${document.fileName}"></h4>
                         </a>
+                        <table class="table">
+                            <tr>
+                                <th colspan="2">
+                                    <a th:href="@{/tags/edit(id=${document.id})}">Add Document Tag</a>
+                                </th>
+                            </tr>
+                            <tr th:each="tag : ${document.tags}">
+                                <td th:text="${tag.name}"></td>
+                                <td th:text="${tag.score}"></td>
+                            </tr>
+                        </table>
                         <p th:text="${document.body}"></p>
                     </div>
 

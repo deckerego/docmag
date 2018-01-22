@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Docmag Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/css/imgareaselect-default.css" integrity="sha256-2m75JSbDAbDaM0OVP9exQ69ZJjSRM3t5YYbP6RNuKPc=" crossorigin="anonymous" />
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="header :: header">&nbsp;</div>
+
+    <div class="page-header">
+        <h1>Document Tagging</h1>
+    </div>
+
+    <form th:action="@{/tags/save}" method="POST">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="documentWell" class="well">
+                    <img id="coverImage" th:src="@{/tags/cover/(id=${id})}" alt="Document Image for Tagging"/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group" style="padding-bottom: 10px">
+                    <input id="templateName" name="name" type="text" class="form-control" placeholder="Tag Name" th:value="${name}">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Save</button>
+                    </span>
+                </div>
+                <div id="previewWell" class="well"><canvas id="templatePreview"></canvas></div>
+            </div>
+        </div>
+        <input type="hidden" id="documentId" name="id" th:value="${id}"/>
+        <input type="hidden" id="templateX" name="xPos" th:value="${xPos}"/>
+        <input type="hidden" id="templateY" name="yPos" th:value="${yPos}"/>
+        <input type="hidden" id="templateWidth" name="width" th:value="${width}"/>
+        <input type="hidden" id="templateHeight" name="height" th:value="${height}"/>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha256-uzBYVacY+4pnUzCH2+C9dcgWYCl2eeccG8EnRaG/LSs=" crossorigin="anonymous"></script>
+<script src="/js/tagging.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#coverImage').imgAreaSelect({
+            handles: true,
+            onSelectChange: previewSelect,
+            onSelectEnd: saveSelect
+        });
+    });
+</script>
+</body>
+</html>

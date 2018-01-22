@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.*
 
 @RunWith(SpringRunner)
 @SpringBootTest
-class LocalFileServiceTest {
+class LocalFileServiceTests {
 
     @MockBean
     private DocConfig docConfig
@@ -32,5 +32,6 @@ class LocalFileServiceTest {
     void backwardTraversal() {
         given(this.docConfig.getRoot()).willReturn(System.getProperty("user.dir"))
         fileSvc.fetchFile("../../etc/passwd")
+        System.err.println("*** I SHOULD NOT BE ***")
     }
 }
