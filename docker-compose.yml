@@ -46,7 +46,7 @@ services:
       - esnet
 
   modsecurity:
-    build: modsecurity/.
+    image: deckerego/modsecurity-crs:latest
     container_name: modsecurity
     environment:
       - PARANOIA=3

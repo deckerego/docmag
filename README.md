@@ -19,7 +19,7 @@ run the docker container published at: https://hub.docker.com/r/deckerego/docmag
 ## Installing
 
 You can install docmag and its dependencies (including Elasticsearch) using just the
-docker-compose.yml file by cloning this repository and executing:
+docker-compose.yml file by downloading the file from this repository and executing:
 
     export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose up -d
 

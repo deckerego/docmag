@@ -20,3 +20,6 @@ services:
     build: .
     ports:
       - 2080:8080
+
+  modsecurity:
+    build: modsecurity/.
