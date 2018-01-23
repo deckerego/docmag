@@ -83,7 +83,7 @@
                         <div class="media-body">
                             <table class="table">
                                 <tr>
-                                    <th th:text="(${document.tags.size()} le 0)? 'No Tags' : 'Document Tags:'"></th>
+                                    <th th:text="(${#objects.nullSafe(document.tags?.size(), 0)} le 0)? 'No Tags' : 'Document Tags:'"></th>
                                     <th><a th:href="@{/tags/edit(id=${document.id})}">Add Tag</a></th>
                                 </tr>
                                 <tr th:each="tag : ${document.tags}">
