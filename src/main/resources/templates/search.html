@@ -2,10 +2,9 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Docmag Search</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" integrity="sha256-I4gvabvvRivuPAYFqevVhZl88+vNf2NksupoBxMQi04=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
@@ -14,46 +13,31 @@
 
     <div th:replace="header :: header">&nbsp;</div>
 
-    <div class="page-header">
-        <h1>Document Search</h1>
-    </div>
+    <h1 class="display-4">Document Search</h1>
 
     <form th:action="@{/search}" method="GET">
-        <div class="row">
-            <div class="col-sm-8" style="padding-bottom: 10px">
-                <div class="input-group">
-                    <input type="text" name="query" class="form-control" th:value="${query}">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">Go!</button>
-                    </span>
-                </div>
-                <div th:each="tag : ${tags}">
-                    <span class="label label-default" th:text="${tag}"></span>
-                    <input type="hidden" name="tag" th:value="${tag}">
-                </div>
+        <div class="form-group row">
+            <div class="input-group col-lg-10">
+                <input type="text" name="query" class="form-control" th:value="${query}">
+                <span class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Go!</button>
+                </span>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-4" style="padding-bottom: 20px">
-              <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
-              <span class="input-group-addon" id="basic-starttime">From</span>
-              <input type="text" name="startTime" class="form-control" aria-describedby="basic-starttime" th:value="${startTime}">
-              <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-th"></span>
-              </div>
+        <div class="form-group row">
+            <div class="col-sm ml-1" th:each="tag : ${tags}">
+                <span class="badge badge-info" th:text="${tag}"></span>
+                <input type="hidden" name="tag" th:value="${tag}">
             </div>
-          </div>
+        </div>
 
-          <div class="col-sm-4" style="padding-bottom: 20px">
-            <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
-              <span class="input-group-addon" id="basic-endtime">To</span>
-              <input type="text" name="endTime" class="form-control" aria-describedby="basic-endtime" th:value="${endTime}">
-              <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-th"></span>
-              </div>
-            </div>
-          </div>
+        <div class="form-group row">
+            <label for="startTime" class="col-form-label text-right col-lg-1">From</label>
+            <input type="text" id="startTime" name="startTime" class="form-control col-lg-4" placeholder="yyyy-mm-dd" th:value="${startTime}">
+
+            <label for="endTime" class="col-form-label text-right col-lg-1">To</label>
+            <input type="text" id="endTime" name="endTime" class="form-control col-lg-4" placeholder="yyyy-mm-dd" th:value="${endTime}">
         </div>
     </form>
 
@@ -61,14 +45,18 @@
         <div class="col-lg-10">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
-                    <li th:class="(1 eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} gt 1)? @{/search/(query=${query}, tag=${tags}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
+                    <li class="page-item" th:classappend="(1 eq ${currentPage})? 'disabled'">
+                        <a class="page-link" th:href="(${currentPage} gt 1)? @{/search/(query=${query}, tag=${tags}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="(${i} eq ${currentPage})? 'active'"><a th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a></li>
-                    <li th:class="(${totalPages} eq ${currentPage})? 'disabled'">
-                        <a th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, tag=${tags}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
+
+                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="(${i} eq ${currentPage})? 'active'">
+                        <a class="page-link" th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a>
+                    </li>
+
+                    <li class="page-item" th:classappend="(${totalPages} eq ${currentPage})? 'disabled'">
+                        <a class="page-link" th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, tag=${tags}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -83,30 +71,32 @@
 
     <div class="row">
         <div class="col-lg-10">
-            <div class="list-group">
-                <div class="media list-group-item" th:each="document : ${results.content}">
-                    <div class="media-body">
-                        <h3 class="list-group-item-heading" th:text="${document.lastModified}"></h3>
-                        <a th:href="@{/read(id=${document.id})}" target="_blank">
-                            <h4 class="list-group-item-text" th:text="${document.fileName}"></h4>
-                        </a>
-                        <table class="table">
-                            <tr>
-                                <th colspan="2">
-                                    <a th:href="@{/tags/edit(id=${document.id})}">Add Document Tag</a>
-                                </th>
-                            </tr>
-                            <tr th:each="tag : ${document.tags}">
-                                <td th:text="${tag.name}"></td>
-                                <td th:text="${tag.score}"></td>
-                            </tr>
-                        </table>
-                        <p th:text="${document.body}"></p>
-                    </div>
+            <div class="card mb-2" th:each="document : ${results.content}">
+                <a th:href="@{/read(id=${document.id})}" target="_blank">
+                    <h5 class="card-header" th:text="${document.fileName}"></h5>
+                </a>
 
-                    <div class="media-left media-top">
+                <div class="card-body">
+                    <h6 class="card-title" th:text="${document.lastModified}"></h6>
+
+                    <div class="media">
+                        <div class="media-body">
+                            <table class="table">
+                                <tr>
+                                    <th th:text="(${document.tags.size()} le 0)? 'No Tags' : 'Document Tags:'"></th>
+                                    <th><a th:href="@{/tags/edit(id=${document.id})}">Add Tag</a></th>
+                                </tr>
+                                <tr th:each="tag : ${document.tags}">
+                                    <td th:text="${tag.name}"></td>
+                                    <td th:text="${tag.score}"></td>
+                                </tr>
+                            </table>
+
+                            <p class="card-text" th:text="${document.body}"></p>
+                        </div>
+
                         <a th:href="@{/read(id=${document.id})}" target="_blank">
-                            <img class="media-object" width="300" height="200" th:src="@{/read/thumbnail(id=${document.id})}" th:alt="${document.fileName}"/>
+                            <img width="300" height="200" th:src="@{/read/thumbnail(id=${document.id})}" th:alt="${document.fileName}"/>
                         </a>
                     </div>
                 </div>
@@ -115,8 +105,8 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js" integrity="sha256-TueWqYu0G+lYIimeIcMI8x1m14QH/DQVt4s9m/uuhPw=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
