@@ -84,7 +84,7 @@
                             <table class="table">
                                 <tr>
                                     <th th:text="(${#objects.nullSafe(document.tags?.size(), 0)} le 0)? 'No Tags' : 'Document Tags:'"></th>
-                                    <th><a th:href="@{/tags/edit(id=${document.id})}">Add Tag</a></th>
+                                    <th><a th:href="@{/tags/create(documentId=${document.id})}">Add Tag</a></th>
                                 </tr>
                                 <tr th:each="tag : ${document.tags}">
                                     <td th:text="${tag.name}"></td>

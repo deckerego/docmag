@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import javax.imageio.ImageIO
 import javax.servlet.http.HttpServletResponse
 import java.awt.Image
+import java.awt.image.BufferedImage
 
 @Controller
 @RequestMapping("/tags")
@@ -45,10 +46,10 @@ class TaggingController {
         "tags"
     }
 
-    @GetMapping("/edit")
-    def tagging(Model model,
-        @RequestParam(value="id", required=true) String id) {
-        model.addAttribute"id", id
+    @GetMapping("/create")
+    def createTag(Model model,
+                @RequestParam(value="documentId", required=true) String documentId) {
+        model.addAttribute"documentId", documentId
         model.addAttribute"name", ""
         model.addAttribute"xPos", 0
         model.addAttribute"yPos", 0
@@ -58,10 +59,30 @@ class TaggingController {
         "edittag"
     }
 
+    @GetMapping("/edit")
+    def editTag(Model model,
+                @RequestParam(value="id", required=true) String id) {
+        Optional<TagTemplate> result = tagTemplateRepository.findById id
+
+        if(result) {
+            TagTemplate tagTemplate = result.get()
+
+            model.addAttribute "id", tagTemplate.id
+            model.addAttribute "documentId", tagTemplate.sourceDocument.id
+            model.addAttribute "name", tagTemplate.name
+            model.addAttribute "xPos", tagTemplate.sourceDocument.xPos
+            model.addAttribute "yPos", tagTemplate.sourceDocument.yPos
+            model.addAttribute "width", tagTemplate.template.width
+            model.addAttribute "height", tagTemplate.template.height
+        }
+
+        "edittag"
+    }
+
     @GetMapping("/cover")
     def coverPage(HttpServletResponse response,
-                @RequestParam(value="id", required=true) String id) {
-        ScannedDoc scanDoc = scannedRepository.findById id
+                @RequestParam(value="documentId", required=true) String documentId) {
+        ScannedDoc scanDoc = scannedRepository.findById documentId
         File file = localFileService.fetchFile "${scanDoc.parentPath}/${scanDoc.fileName}"
         String contentType = scanDoc.metadata["Content-Type"]
 
@@ -73,32 +94,48 @@ class TaggingController {
         response.flushBuffer()
     }
 
+    @GetMapping("/template")
+    def template(HttpServletResponse response,
+                  @RequestParam(value="id", required=true) String id) {
+        Optional<TagTemplate> result = tagTemplateRepository.findById id
+        BufferedImage template = result.get().template
+
+        OutputStream os = response.getOutputStream()
+        response.setContentType MediaType.IMAGE_PNG_VALUE
+        ImageIO.write template, "PNG", os
+        response.flushBuffer()
+    }
+
     @PostMapping("/save")
     def saveTagTemplate(Model model,
                         @RequestParam String id,
+                        @RequestParam String documentId,
                         @RequestParam Integer xPos,
                         @RequestParam Integer yPos,
                         @RequestParam Integer width,
                         @RequestParam Integer height,
                         @RequestParam String name) {
-        ScannedDoc scanDoc = scannedRepository.findById id
+        if(id.isEmpty()) id = null
+
+        ScannedDoc scanDoc = scannedRepository.findById documentId
         File file = localFileService.fetchFile "${scanDoc.parentPath}/${scanDoc.fileName}"
         String contentType = scanDoc.metadata["Content-Type"]
         Image image = imageService.render(file, contentType, 1.0)
 
-        TagTemplate tagTemplate = new TagTemplate(name: name, indexUpdated: Calendar.getInstance().getTime())
+        TagTemplate tagTemplate = new TagTemplate(id: id, name: name, indexUpdated: Calendar.getInstance().getTime())
         tagTemplate.template = image.getSubimage xPos, yPos, width, height
-        tagTemplate.sourceDocument = new TagTemplate.SourceDoc(id: id, xPos: xPos, yPos: yPos)
+        tagTemplate.sourceDocument = new TagTemplate.SourceDoc(id: documentId, xPos: xPos, yPos: yPos)
 
         tagTemplate = tagTemplateRepository.save(tagTemplate)
 
-        model.addAttribute"id", tagTemplate.sourceDocument.id
+        model.addAttribute"id", tagTemplate.id
+        model.addAttribute"documentId", tagTemplate.sourceDocument.id
         model.addAttribute"name", tagTemplate.name
         model.addAttribute"xPos", tagTemplate.sourceDocument.xPos
         model.addAttribute"yPos", tagTemplate.sourceDocument.yPos
-        model.addAttribute"width", width
-        model.addAttribute"height", height
+        model.addAttribute"width", tagTemplate.template.width
+        model.addAttribute"height", tagTemplate.template.height
 
-        "redirect:/search"
+        "edittag"
     }
 }

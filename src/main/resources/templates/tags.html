@@ -19,9 +19,15 @@
         <div class="col-lg-10">
             <table class="table">
                 <tr th:each="tagtemplate : ${results}">
+                    <td>
+                        <a th:href="@{/tags/edit(id=${tagtemplate.id})}">&#x270E;</a>
+                    </td>
                     <td th:text="${tagtemplate.count}"></td>
                     <td>
                         <a th:href="@{/search(tag=${tagtemplate.name})}" th:text="${tagtemplate.name}"></a>
+                    </td>
+                    <td>
+                        <img th:src="@{/tags/template(id=${tagtemplate.id})}" th:alt="${tagtemplate.name}"/>
                     </td>
                 </tr>
             </table>
