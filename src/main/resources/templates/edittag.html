@@ -24,7 +24,7 @@
                 <div class="card">
                     <h5 class="card-title">Sample Document</h5>
                     <div class="card-body">
-                        <img id="coverImage" th:src="@{/tags/cover/(id=${id})}" alt="Document Image for Tagging"/>
+                        <img id="coverImage" th:src="@{/tags/cover/(documentId=${documentId})}" alt="Document Image for Tagging"/>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,8 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" id="documentId" name="id" th:value="${id}"/>
+        <input type="hidden" id="id" name="id" th:value="${id}"/>
+        <input type="hidden" id="documentId" name="documentId" th:value="${documentId}"/>
         <input type="hidden" id="templateX" name="xPos" th:value="${xPos}"/>
         <input type="hidden" id="templateY" name="yPos" th:value="${yPos}"/>
         <input type="hidden" id="templateWidth" name="width" th:value="${width}"/>
@@ -63,7 +64,8 @@
         $('#coverImage').imgAreaSelect({
             handles: true,
             onSelectChange: previewSelect,
-            onSelectEnd: saveSelect
+            onSelectEnd: saveSelect,
+            onInit: loadSelect
         });
     });
 </script>
