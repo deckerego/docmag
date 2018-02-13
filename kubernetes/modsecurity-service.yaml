@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: /home/jellis/bin/kompose convert -f ../docker-compose.yml
+    kompose.version: 1.8.0 (0c0c027)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: modsecurity
+  name: modsecurity
+spec:
+  ports:
+  - name: "1080"
+    port: 1080
+    targetPort: 80
+  selector:
+    io.kompose.service: modsecurity
+status:
+  loadBalancer: {}

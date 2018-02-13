@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /home/jellis/bin/kompose convert -f ../docker-compose.yml
+    kompose.version: 1.8.0 (0c0c027)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: docmagui
+  name: docmagui
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: docmagui
+    spec:
+      containers:
+      - env:
+        - name: DOCUMENT_ROOT
+          value: /usr/share/docmagui/docs
+        - name: ELASTICSEARCH_CLUSTER
+          value: docmag-cluster
+        - name: ELASTICSEARCH_HOST
+          value: elasticsearch01
+        - name: ELASTICSEARCH_PORT
+          value: "9300"
+        image: deckerego/docmagui:latest
+        name: docmagui
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/share/docmagui/docs
+          name: docmagui-claim0
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: docmagui-claim0
+        persistentVolumeClaim:
+          claimName: docmagui-claim0
+          readOnly: true
+status: {}
