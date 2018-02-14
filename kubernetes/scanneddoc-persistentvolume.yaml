@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  creationTimestamp: null
+  name: scanneddoc
+spec:
+  accessModes:
+  - ReadOnlyMany
+  nfs:
+    server: visor.deckerego.net
+    path: "/home/public/Scanned"

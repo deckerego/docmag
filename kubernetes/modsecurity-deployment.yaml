@@ -2,7 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: /home/jellis/bin/kompose convert -f ../docker-compose.yml
+    kompose.cmd: /home/jellis/bin/kompose -f ../docker-compose.yml -f ../docker-compose-devel.yml
+      convert
     kompose.version: 1.8.0 (0c0c027)
   creationTimestamp: null
   labels:

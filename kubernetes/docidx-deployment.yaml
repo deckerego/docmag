@@ -1,9 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: /home/jellis/bin/kompose convert -f ../docker-compose.yml
-    kompose.version: 1.8.0 (0c0c027)
   creationTimestamp: null
   labels:
     io.kompose.service: docidx
@@ -39,12 +36,12 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /usr/share/docidx/docs
-          name: docidx-claim0
+          name: docidx-scanneddoc
           readOnly: true
       restartPolicy: Always
       volumes:
-      - name: docidx-claim0
+      - name: docidx-scanneddoc
         persistentVolumeClaim:
-          claimName: docidx-claim0
+          claimName: docidx-scanneddoc
           readOnly: true
 status: {}

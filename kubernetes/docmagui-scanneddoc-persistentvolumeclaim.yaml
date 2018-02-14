@@ -2,9 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
-  labels:
-    io.kompose.service: docmagui-claim0
-  name: docmagui-claim0
+  name: docmagui-scanneddoc
 spec:
   accessModes:
   - ReadOnlyMany
