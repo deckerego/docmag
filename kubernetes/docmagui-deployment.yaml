@@ -26,12 +26,15 @@ spec:
         - name: ELASTICSEARCH_CLUSTER
           value: docmag-cluster
         - name: ELASTICSEARCH_HOST
-          value: elasticsearch01
+          value: elasticsearch
         - name: ELASTICSEARCH_PORT
           value: "9300"
         image: deckerego/docmagui:latest
         name: docmagui
-        resources: {}
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
         volumeMounts:
         - mountPath: /usr/share/docmagui/docs
           name: docmagui-scanneddoc
