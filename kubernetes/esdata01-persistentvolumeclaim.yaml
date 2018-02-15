@@ -5,8 +5,8 @@ metadata:
   name: esdata01
 spec:
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
 status: {}

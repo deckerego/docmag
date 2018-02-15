@@ -6,6 +6,8 @@ metadata:
 spec:
   accessModes:
   - ReadOnlyMany
+  capacity:
+    storage: 400Gi
   nfs:
     server: visor.deckerego.net
     path: "/home/public/Scanned"

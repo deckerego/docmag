@@ -1,10 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: /home/jellis/bin/kompose -f ../docker-compose.yml -f ../docker-compose-devel.yml
-      convert
-    kompose.version: 1.8.0 (0c0c027)
   creationTimestamp: null
   labels:
     io.kompose.service: elasticsearch
@@ -20,12 +16,24 @@ spec:
         io.kompose.service: elasticsearch
     spec:
       containers:
-      - env:
+      - name: elasticsearch01
+        image: deckerego/elasticsearch:5.6.4
+        env:
         - name: ES_JAVA_OPTS
           value: -Xms800M -Xmx800M
-        image: deckerego/elasticsearch:5.6.4
-        name: elasticsearch01
-        resources: {}
+        - name: bootstrap.memory_lock
+          value: "false"
+        resources:
+          requests:
+            cpu: "1000m"
+            memory: "1Gi"
+        ports:
+          - containerPort: 9300
+            name: transport
+            protocol: TCP
+          - containerPort: 9200
+            name: http
+            protocol: TCP
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/data
           name: esdata01

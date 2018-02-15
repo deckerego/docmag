@@ -5,9 +5,9 @@ metadata:
   name: esdata01
 spec:
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   capacity:
-    storage: 1Gi
-  nfs:
-      server: visor.deckerego.net
-      path: "/home/docmag/esdata01"
+    storage: 10Gi
+  hostPath:
+      path: "/var/opt/esdata01"
+      type: DirectoryOrCreate

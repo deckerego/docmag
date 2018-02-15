@@ -8,5 +8,5 @@ spec:
   - ReadOnlyMany
   resources:
     requests:
-      storage: 100Mi
+      storage: 400Gi
 status: {}
