@@ -1,10 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: /home/jellis/bin/kompose -f ../docker-compose.yml -f ../docker-compose-devel.yml
-      convert
-    kompose.version: 1.8.0 (0c0c027)
   creationTimestamp: null
   labels:
     io.kompose.service: modsecurity
@@ -26,6 +22,9 @@ spec:
         name: modsecurity
         ports:
         - containerPort: 80
-        resources: {}
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
       restartPolicy: Always
 status: {}

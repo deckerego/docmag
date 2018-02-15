@@ -26,22 +26,25 @@ spec:
         - name: ELASTICSEARCH_CLUSTER
           value: docmag-cluster
         - name: ELASTICSEARCH_HOST
-          value: elasticsearch01
+          value: elasticsearch
         - name: ELASTICSEARCH_PORT
           value: "9300"
         - name: FS_JAVA_OPTS
           value: -Xms512m -Xmx1g
         image: deckerego/docidx:latest
         name: docidx
-        resources: {}
+        resources:
+          requests:
+            cpu: "1500m"
+            memory: "2Gi"
         volumeMounts:
         - mountPath: /usr/share/docidx/docs
-          name: docidx-scanneddoc
+          name: docmagui-scanneddoc
           readOnly: true
       restartPolicy: Always
       volumes:
-      - name: docidx-scanneddoc
+      - name: docmagui-scanneddoc
         persistentVolumeClaim:
-          claimName: docidx-scanneddoc
+          claimName: docmagui-scanneddoc
           readOnly: true
 status: {}
