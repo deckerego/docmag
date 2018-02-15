@@ -6,8 +6,6 @@ metadata:
     io.kompose.service: elasticsearch
   name: elasticsearch
 spec:
-  selector:
-    app: elasticsearch
   ports:
   - name: transport
     port: 9300
