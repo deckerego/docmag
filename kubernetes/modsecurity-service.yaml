@@ -11,9 +11,8 @@ metadata:
   name: modsecurity
 spec:
   ports:
-  - name: "1080"
-    port: 1080
-    targetPort: 80
+  - name: http
+    port: 80
   selector:
     io.kompose.service: modsecurity
   externalIPs:
