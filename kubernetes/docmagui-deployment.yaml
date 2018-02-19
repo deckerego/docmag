@@ -29,6 +29,10 @@ spec:
           value: elasticsearch
         - name: ELASTICSEARCH_PORT
           value: "9300"
+        - name: AUTH_USERNAME
+          value: docmag
+        - name: AUTH_PASSWORD
+          value: supersecretpassword
         image: deckerego/docmagui:latest
         name: docmagui
         resources:
