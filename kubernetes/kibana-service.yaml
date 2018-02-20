@@ -3,14 +3,14 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: modsecurity
-  name: modsecurity
+    io.kompose.service: kibana
+  name: kibana
 spec:
   ports:
   - name: http
-    port: 80
+    port: 5601
   selector:
-    io.kompose.service: modsecurity
+    io.kompose.service: kibana
   externalIPs:
   - 192.168.129.206
 status:

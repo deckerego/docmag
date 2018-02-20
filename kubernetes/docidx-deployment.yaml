@@ -31,7 +31,7 @@ spec:
           value: "9300"
         - name: FS_JAVA_OPTS
           value: -Xms512m -Xmx1g
-        image: deckerego/docidx:latest
+        image: deckerego/docidx:snapshot
         name: docidx
         resources:
           requests:
