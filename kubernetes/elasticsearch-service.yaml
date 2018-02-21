@@ -3,7 +3,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: elasticsearch
+    service: elasticsearch
   name: elasticsearch
 spec:
   ports:
@@ -12,6 +12,6 @@ spec:
   - name: http
     port: 9200
   selector:
-    io.kompose.service: elasticsearch
+    service: elasticsearch
 status:
   loadBalancer: {}

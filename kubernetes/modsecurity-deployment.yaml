@@ -3,16 +3,20 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: modsecurity
+    service: modsecurity
   name: modsecurity
 spec:
   replicas: 1
   strategy: {}
+  selector:
+    matchLabels:
+      service: modsecurity
+  revisionHistoryLimit: 1
   template:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: modsecurity
+        service: modsecurity
     spec:
       containers:
       - env:

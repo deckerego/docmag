@@ -3,14 +3,14 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: modsecurity
+    service: modsecurity
   name: modsecurity
 spec:
   ports:
   - name: http
     port: 80
   selector:
-    io.kompose.service: modsecurity
+    service: modsecurity
   externalIPs:
   - 192.168.129.206
 status:

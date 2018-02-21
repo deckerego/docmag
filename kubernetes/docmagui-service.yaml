@@ -3,13 +3,13 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: docmagui
+    service: docmagui
   name: docmagui
 spec:
   ports:
   - name: http
     port: 8080
   selector:
-    io.kompose.service: docmagui
+    service: docmagui
 status:
   loadBalancer: {}

@@ -3,17 +3,21 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: docidx
+    service: docidx
   name: docidx
 spec:
   replicas: 1
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      io.kompose.service: docidx
+  revisionHistoryLimit: 1
   template:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: docidx
+        service: docidx
     spec:
       containers:
       - env:
@@ -31,12 +35,12 @@ spec:
           value: "9300"
         - name: FS_JAVA_OPTS
           value: -Xms512m -Xmx1g
-        image: deckerego/docidx:snapshot
+        image: deckerego/docidx:0.3.2
         name: docidx
         resources:
           requests:
-            cpu: "1500m"
-            memory: "2Gi"
+            cpu: "2000m"
+            memory: "2560Mi"
         volumeMounts:
         - mountPath: /usr/share/docidx/docs
           name: docmagui-scanneddoc

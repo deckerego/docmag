@@ -3,17 +3,21 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: elasticsearch
+    service: elasticsearch
   name: elasticsearch
 spec:
   replicas: 1
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      service: elasticsearch
+  revisionHistoryLimit: 1
   template:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: elasticsearch
+        service: elasticsearch
     spec:
       containers:
       - name: elasticsearch01
