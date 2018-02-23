@@ -1,23 +1,39 @@
-apiVersion: extensions/v1beta1
+apiVersion: v1
+kind: Service
+metadata:
+  name: docmagui
+spec:
+  ports:
+  - name: http
+    port: 8080
+  selector:
+    app: docmagui
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: docmagui-scanneddoc
+spec:
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 400Gi
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    service: docmagui
   name: docmagui
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
-      service: docmagui
+      app: docmagui
   revisionHistoryLimit: 1
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: docmagui
+        app: docmagui
     spec:
       containers:
       - env:
@@ -30,9 +46,15 @@ spec:
         - name: ELASTICSEARCH_PORT
           value: "9300"
         - name: AUTH_USERNAME
-          value: docmag
+          valueFrom:
+            secretKeyRef:
+              name: docmagui-secret
+              key: username
         - name: AUTH_PASSWORD
-          value: supersecretpassword
+          valueFrom:
+            secretKeyRef:
+              name: docmagui-secret
+              key: password
         image: deckerego/docmagui:latest
         name: docmagui
         resources:
@@ -43,10 +65,8 @@ spec:
         - mountPath: /usr/share/docmagui/docs
           name: docmagui-scanneddoc
           readOnly: true
-      restartPolicy: Always
       volumes:
       - name: docmagui-scanneddoc
         persistentVolumeClaim:
           claimName: docmagui-scanneddoc
           readOnly: true
-status: {}

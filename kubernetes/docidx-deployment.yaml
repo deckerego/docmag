@@ -1,23 +1,17 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    service: docidx
   name: docidx
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
-      io.kompose.service: docidx
+      app: docidx
   revisionHistoryLimit: 1
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        service: docidx
+        app: docidx
     spec:
       containers:
       - env:
@@ -51,4 +45,3 @@ spec:
         persistentVolumeClaim:
           claimName: docmagui-scanneddoc
           readOnly: true
-status: {}
