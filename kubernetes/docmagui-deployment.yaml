@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: docmagui
+spec:
+  ports:
+  - name: http
+    port: 8080
+  selector:
+    app: docmagui
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: docmagui-scanneddoc
+spec:
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 400Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docmagui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docmagui
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: docmagui
+    spec:
+      containers:
+      - env:
+        - name: DOCUMENT_ROOT
+          value: /usr/share/docmagui/docs
+        - name: ELASTICSEARCH_CLUSTER
+          value: docmag-cluster
+        - name: ELASTICSEARCH_HOST
+          value: elasticsearch
+        - name: ELASTICSEARCH_PORT
+          value: "9300"
+        - name: AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: docmagui-secret
+              key: username
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: docmagui-secret
+              key: password
+        image: deckerego/docmagui:latest
+        name: docmagui
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+        volumeMounts:
+        - mountPath: /usr/share/docmagui/docs
+          name: docmagui-scanneddoc
+          readOnly: true
+      volumes:
+      - name: docmagui-scanneddoc
+        persistentVolumeClaim:
+          claimName: docmagui-scanneddoc
+          readOnly: true

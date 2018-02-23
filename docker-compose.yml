@@ -15,7 +15,7 @@ services:
       - esnet
 
   docidx:
-    image: deckerego/docidx:latest
+    image: deckerego/docidx:0.3.2
     container_name: docidx
     depends_on: [ elasticsearch ]
     environment:
@@ -32,13 +32,15 @@ services:
       - esnet
 
   docmagui:
-    image: deckerego/docmagui:latest
+    image: deckerego/docmagui:0.2.1
     container_name: docmagui
     environment:
       - ELASTICSEARCH_HOST=elasticsearch01
       - ELASTICSEARCH_PORT=9300
       - ELASTICSEARCH_CLUSTER=docmag-cluster
       - DOCUMENT_ROOT=/usr/share/docmagui/docs
+      - AUTH_USERNAME=docmag
+      - AUTH_PASSWORD=supersecretpassword
     depends_on: [ elasticsearch ]
     volumes:
       - ${DOCUMENT_HOST_DIR}:/usr/share/docmagui/docs:ro

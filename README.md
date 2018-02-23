@@ -18,7 +18,7 @@ run the docker container published at: https://hub.docker.com/r/deckerego/docmag
 
 ## Installing
 
-You can install docmag and its dependencies (including Elasticsearch and docidx) using 
+You can install docmag and its dependencies (including Elasticsearch and docidx) using
 just the docker-compose.yml file by extracting the latest release found at:
 
 https://github.com/deckerego/docmag/releases
@@ -48,7 +48,7 @@ re-start to deploy the latest version of each component. This would include:
 
 ## Using docidx to Index Files
 
-docidx indexes files within Elasticsearch and prepares them for display - this is the 
+docidx indexes files within Elasticsearch and prepares them for display - this is the
 process that feeds docmag. More info is available at https://github.com/deckerego/docidx
 
 
@@ -80,3 +80,9 @@ Elasticsearch metadata generated from these containers, execute:
 To search within your documents, view thumbnails and open the full document
 navigate to `http://localhost:1080`. This should take you to the main search
 interface, which will perform a full text search on your indexed documents.
+
+
+## Kubernetes Support
+
+DocMag can also be installed within a Kubernetes cluster - see kubernetes/README.md
+for additional details.
