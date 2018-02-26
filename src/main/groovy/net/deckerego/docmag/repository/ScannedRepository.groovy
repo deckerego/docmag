@@ -3,6 +3,7 @@ package net.deckerego.docmag.repository
 import net.deckerego.docmag.model.ScannedDoc
 import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder
 import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.join.ScoreMode
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse
 import org.elasticsearch.index.query.BoolQueryBuilder
 import org.elasticsearch.index.query.NestedQueryBuilder
@@ -19,7 +20,9 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery
+import static org.elasticsearch.index.query.QueryBuilders.nestedQuery
 import static org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
 
 @Repository
@@ -35,16 +38,16 @@ class ScannedRepository {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder()
                 .withQuery(simpleQueryStringQuery(name).field("body"))
 
-        BoolQueryBuilder tagQuery = new BoolQueryBuilder()
+        BoolQueryBuilder tagQuery = boolQuery()
         for(String tag : tags) {
-            tagQuery = tagQuery.must(matchQuery("tags.name", tag))
+            tagQuery = tagQuery.must(matchQuery("tags.name", tags[0]))
         }
 
-        NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder("tags", tagQuery)
-        searchQueryBuilder = searchQueryBuilder.withQuery(nestedQueryBuilder)
+        NestedQueryBuilder nestedQueryBuilder = nestedQuery("tags", tagQuery, ScoreMode.Avg)
 
         SearchQuery searchQuery = searchQueryBuilder
                 .withFilter(rangeBuilder)
+//                .withQuery(nestedQueryBuilder)
                 .withPageable(pageable)
                 .build()
 
