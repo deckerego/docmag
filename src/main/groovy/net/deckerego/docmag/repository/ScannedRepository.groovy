@@ -1,8 +1,13 @@
 package net.deckerego.docmag.repository
 
 import net.deckerego.docmag.model.ScannedDoc
+import org.apache.lucene.queryparser.xml.builders.BooleanQueryBuilder
+import org.apache.lucene.search.BooleanQuery
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse
+import org.elasticsearch.index.query.BoolQueryBuilder
+import org.elasticsearch.index.query.NestedQueryBuilder
 import org.elasticsearch.index.query.RangeQueryBuilder
+import org.elasticsearch.index.query.TermQueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -30,10 +35,13 @@ class ScannedRepository {
         NativeSearchQueryBuilder searchQueryBuilder = new NativeSearchQueryBuilder()
                 .withQuery(simpleQueryStringQuery(name).field("body"))
 
+        BoolQueryBuilder tagQuery = new BoolQueryBuilder()
         for(String tag : tags) {
-            searchQueryBuilder = searchQueryBuilder
-                    .withQuery(matchQuery("tags.name", tag))
+            tagQuery = tagQuery.must(matchQuery("tags.name", tag))
         }
+
+        NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder("tags", tagQuery)
+        searchQueryBuilder = searchQueryBuilder.withQuery(nestedQueryBuilder)
 
         SearchQuery searchQuery = searchQueryBuilder
                 .withFilter(rangeBuilder)

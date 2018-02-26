@@ -27,7 +27,7 @@
         "type": "binary"
       },
       "tags": {
-        "type": "object"
+        "type": "nested"
       }
     }
   }
