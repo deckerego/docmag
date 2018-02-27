@@ -29,19 +29,20 @@ spec:
           value: "9300"
         - name: FS_JAVA_OPTS
           value: -Xms512m -Xmx1g
-        image: deckerego/docidx:0.3.2
+        image: deckerego/docidx:0.4.0
         name: docidx
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: "2000m"
             memory: "2560Mi"
         volumeMounts:
         - mountPath: /usr/share/docidx/docs
-          name: docmagui-scanneddoc
+          name: scanneddoc
           readOnly: true
       restartPolicy: Always
       volumes:
-      - name: docmagui-scanneddoc
+      - name: scanneddoc
         persistentVolumeClaim:
-          claimName: docmagui-scanneddoc
+          claimName: scanneddoc
           readOnly: true
