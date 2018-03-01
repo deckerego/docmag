@@ -14,16 +14,19 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.domain.Pageable
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery
 import org.springframework.data.elasticsearch.core.query.GetQuery
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
 import org.springframework.data.elasticsearch.core.query.SearchQuery
 import org.springframework.stereotype.Repository
 
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery
+import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery
 import static org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
+import static org.elasticsearch.index.query.QueryBuilders.typeQuery
 
 @Repository
 class ScannedRepository {
@@ -87,13 +90,10 @@ class ScannedRepository {
     }
 
     long documentCount() {
-        IndicesStatsResponse response = elasticsearchTemplate.client
-                .admin()
-                .indices()
-                .prepareStats("docidx")
-                .setDocs(true)
-                .get()
-
-        response.total.docs.count
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+            .withQuery(typeQuery("fileentry"))
+            .withIndices("docidx")
+            .build()
+        return elasticsearchTemplate.count(searchQuery)
     }
 }

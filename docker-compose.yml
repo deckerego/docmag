@@ -32,7 +32,7 @@ services:
       - esnet
 
   docmagui:
-    image: deckerego/docmagui:0.4.3
+    image: deckerego/docmagui:0.4.4
     container_name: docmagui
     environment:
       - ELASTICSEARCH_HOST=elasticsearch01
