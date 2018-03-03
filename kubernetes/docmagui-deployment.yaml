@@ -55,7 +55,7 @@ spec:
             secretKeyRef:
               name: docmagui-secret
               key: password
-        image: deckerego/docmagui:0.4.4
+        image: deckerego/docmagui:latest
         name: docmagui
         imagePullPolicy: Always
         resources:
