@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;" th:fragment="header(page)">
+<nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;" th:fragment="header(page)">
     <a class="navbar-brand" href="/">DocMag</a>
-    <div id="navbar" class="navbar navbar-expand">
-        <ul class="navbar-nav">
+
+    <div class="navbar-collapse w-100 order-1 order-sm-0 dual-collapse2">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" th:classappend="${page == 'search' ? 'active' : ''}" href="/search">Search</a>
             </li>
@@ -12,10 +13,15 @@
                 <a class="nav-link" th:classappend="${page == 'tags' ? 'active' : ''}" href="/tags">Tags</a>
             </li>
         </ul>
+    </div>
 
+    <div class="navbar-collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/login?logout">Log Out</a>
+                <a class="nav-link" target="_blank" href="https://github.com/deckerego/docmag/wiki">Help</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Log Out</a>
             </li>
         </ul>
     </div>
