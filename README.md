@@ -81,8 +81,3 @@ To search within your documents, view thumbnails and open the full document
 navigate to `http://localhost:1080`. This should take you to the main search
 interface, which will perform a full text search on your indexed documents.
 
-
-## Kubernetes Support
-
-DocMag can also be installed within a Kubernetes cluster - see kubernetes/README.md
-for additional details.
