@@ -32,4 +32,12 @@
             <outputDirectory>/</outputDirectory>
         </file>
     </files>
+    <fileSets>
+        <fileSet>
+            <directory>kubernetes</directory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
 </assembly>
