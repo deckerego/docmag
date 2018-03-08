@@ -154,7 +154,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
-                        <descriptor>package.xml</descriptor>
+                        <descriptor>release.xml</descriptor>
                     </descriptors>
                     <finalName>docmag_${project.version}</finalName>
                 </configuration>
