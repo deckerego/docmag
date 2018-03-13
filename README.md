@@ -16,7 +16,7 @@ Usually you won't want to build and run docmag locally, instead it is best to
 run the docker container published at: https://hub.docker.com/r/deckerego/docmagui/
 
 
-## Installing
+## Installing with Docker Compose
 
 You can install docmag and its dependencies (including Elasticsearch and docidx) using
 just the docker-compose.yml file by extracting the latest release found at:
@@ -34,6 +34,30 @@ search within the directory `/tmp/fs`. A sample startup script is offered as `st
 docker-compose should bring up docmag's user interface and Elasticsearch indexes, while also
 indexing new documents in the background. By default the web application is running
 locally on port 1080.
+
+
+## Installing into Kubernetes with Helm
+
+Installing into a Kubernetes cluster is pretty easy, thanks to Helm. Before you
+install DocMag you will need to do two things however:
+
+1. Set a username and password for the web interface, and
+2. Create a persistent volume that points to your scanned documents
+
+The first step can be accomplished using kubectl on the command line, as in:
+
+    kubectl create secret generic docmagui-secret --from-literal=username='docmag' --from-literal=password='supersecretpassword'
+
+The second step will require some Kubernetes administration. See the example at
+docmag/document-volumes.yaml for a template to mount something over NFS. Once you
+have settings you are happy with, you can create the persistent volume with:
+
+    kubectl apply -f docmag/document-volumes.yaml
+
+Once those two steps are done, add the DocMag repo and install with:
+
+    helm repo add docmag http://docmag.deckerego.net
+    helm install --name=docmag --set modsecurity.service.externalIP=10.200.1.10 docmag
 
 
 ## Upgrading
@@ -80,4 +104,3 @@ Elasticsearch metadata generated from these containers, execute:
 To search within your documents, view thumbnails and open the full document
 navigate to `http://localhost:1080`. This should take you to the main search
 interface, which will perform a full text search on your indexed documents.
-
