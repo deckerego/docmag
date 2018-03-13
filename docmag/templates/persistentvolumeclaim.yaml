@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "docmag.fullname" . }}
+  labels:
+    app: {{ template "docmag.name" . }}
+    chart: {{ template "docmag.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: {{ .Values.volumes.document.storage }}
+  selector:
+    matchLabels:
+      volume: scanneddoc

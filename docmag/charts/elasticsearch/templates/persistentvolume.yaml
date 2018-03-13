@@ -1,0 +1,15 @@
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: esdata01
+  labels:
+    volume: esdata01
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  hostPath:
+      path: "/var/opt/esdata01"
+      type: DirectoryOrCreate

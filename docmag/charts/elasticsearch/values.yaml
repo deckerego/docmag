@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: deckerego/elasticsearch
+  tag: 5.6.4
+  pullPolicy: IfNotPresent
+
+transport:
+  type: ClusterIP
+  port: 9300
+
+service:
+  type: ClusterIP
+  port: 9200
+
+jvm:
+  ms: "800M"
+  mx: "800M"
+
+resources:
+  requests:
+    cpu: "1000m"
+    memory: "1Gi"
+
+volumes:
+  esdata01:
+    storage: 10Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

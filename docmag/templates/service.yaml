@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+#  name: {{ template "docmag.fullname" . }}
+  name: docmagui
+  labels:
+    app: {{ template "docmag.name" . }}
+    chart: {{ template "docmag.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    - port: {{ .Values.service.port }}
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "docmag.name" . }}
+    release: {{ .Release.Name }}

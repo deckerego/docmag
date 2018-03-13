@@ -1,0 +1,63 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "docidx.fullname" . }}
+  labels:
+    app: {{ template "docidx.name" . }}
+    chart: {{ template "docidx.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "docidx.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "docidx.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - env:
+        - name: CRAWLER_ROOTPATH
+          value: /usr/share/docidx/docs
+        - name: ELASTICSEARCH_BATCHSIZE
+          value: "10"
+        - name: ELASTICSEARCH_BATCHWAITMILLIS
+          value: "10000"
+        - name: ELASTICSEARCH_CLUSTER
+          value: docmag-cluster
+        - name: ELASTICSEARCH_HOST
+          value: {{ template "elasticsearch.fullname" . }}
+        - name: ELASTICSEARCH_PORT
+          value: "9300"
+        - name: FS_JAVA_OPTS
+          value: -Xms{{ .Values.jvm.ms }} -Xmx{{ .Values.jvm.mx }}
+        name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+{{ toYaml . | indent 8 }}
+    {{- end }}
+        volumeMounts:
+        - mountPath: /usr/share/docidx/docs
+          name: {{ template "docidx.fullname" . }}
+          readOnly: true
+      volumes:
+      - name: {{ template "docidx.fullname" . }}
+        persistentVolumeClaim:
+          claimName: {{ template "docmag.fullname" . }}
+          readOnly: true
+      nodeSelector:
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
