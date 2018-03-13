@@ -1,0 +1,10 @@
+To use Helm to install DocMag:
+
+1. Create a password for the user interface using:
+kubectl create secret generic docmagui-secret --from-literal=username='docmag' --from-literal=password='supersecretpassword'
+
+2. Ensure you have a persistent volume already created that points to your document repository. If not:
+  2a. Modify document-volumes.yaml to fit the storage location of your documents
+  2b. Deploy document-volumes.yaml using `kubectl apply -f document-volumes.yaml`
+
+3. Install DocMag and all its dependencies by executing `helm install .`

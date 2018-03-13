@@ -1,0 +1,70 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "elasticsearch.fullname" . }}
+  labels:
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ template "elasticsearch.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "elasticsearch.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "elasticsearch.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: ES_JAVA_OPTS
+            value: -Xms{{ .Values.jvm.ms }} -Xmx{{ .Values.jvm.mx }}
+          - name: bootstrap.memory_lock
+            value: "false"
+          ports:
+          - containerPort: 9300
+            name: transport
+            protocol: TCP
+          - containerPort: 9200
+            name: http
+            protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /_cluster/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /_cluster/health?wait_for_status=yellow&timeout=120s
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: {{ template "elasticsearch.fullname" . }}
+      volumes:
+      - name: {{ template "elasticsearch.fullname" . }}
+        persistentVolumeClaim:
+          claimName: {{ template "elasticsearch.fullname" . }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

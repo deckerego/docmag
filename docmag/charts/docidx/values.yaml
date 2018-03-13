@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: deckerego/docidx
+  tag: latest
+  pullPolicy: Always
+
+jvm:
+  ms: "1024m"
+  mx: "1535m"
+
+resources:
+  requests:
+    cpu: "2000m"
+    memory: "2Gi"
+
+volumes:
+  document:
+    storage: 400Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

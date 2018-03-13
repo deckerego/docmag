@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: deckerego/docmagui
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+
+volumes:
+  document:
+    storage: 400Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

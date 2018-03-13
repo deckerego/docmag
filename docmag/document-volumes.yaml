@@ -1,0 +1,17 @@
+# This is an example of a persistent volume that should be
+# mounted *before* installing DocMag using Helm
+# Install using: kubectl apply -f document-volumes.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: scanneddoc
+  labels:
+    volume: scanneddoc
+spec:
+  accessModes:
+  - ReadOnlyMany
+  capacity:
+    storage: 400Gi
+  nfs:
+    server: nfs.local
+    path: "/home/documents"
