@@ -48,13 +48,13 @@ spec:
             protocol: TCP
         livenessProbe:
           httpGet:
-            path: /
+            path: /actuator/health
             port: http
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /
+            path: /actuator/health
             port: http
           initialDelaySeconds: 30
           periodSeconds: 10
