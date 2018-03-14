@@ -4,6 +4,7 @@ import org.elasticsearch.client.Client
 import org.elasticsearch.common.settings.Settings
 import org.elasticsearch.common.transport.InetSocketTransportAddress
 import org.elasticsearch.transport.client.PreBuiltTransportClient
+import org.springframework.boot.actuate.elasticsearch.ElasticsearchHealthIndicator
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,5 +28,10 @@ class ElasticConfig {
         Client client = new PreBuiltTransportClient(settings)
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port))
         new ElasticsearchTemplate(client)
+    }
+
+    @Bean
+    ElasticsearchHealthIndicator elasticsearchHealthIndicator(ElasticsearchOperations elasticsearchTemplate) {
+        new ElasticsearchHealthIndicator(elasticsearchTemplate.getClient(), 5 * 1000, "docidx")
     }
 }
