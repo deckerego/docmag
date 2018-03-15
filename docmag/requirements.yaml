@@ -1,0 +1,7 @@
+dependencies:
+- name: docidx
+  version: "0.1.0"
+  repository: "http://helm.deckerego.net"
+- name: modsecurity
+  version: "0.1.0"
+  repository: "http://helm.deckerego.net"
