@@ -57,7 +57,7 @@ have settings you are happy with, you can create the persistent volume with:
 Once those two steps are done, add the DocMag repo and install with:
 
     helm repo add docmag http://helm.deckerego.net
-    helm install --name=docmag --set modsecurity.service.externalIP=10.200.1.10 docmag
+    helm install --name=docmag --set modsecurity.service.externalIP=10.200.1.10 deckerego/docmag
 
 
 ## Upgrading
