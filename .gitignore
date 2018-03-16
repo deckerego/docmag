@@ -2,6 +2,10 @@
 .idea
 out/
 
+# Packaged Helm charts
+docmag/charts/*.tgz
+docmag/requirements.lock
+
 # Compiled class file
 *.class
 
