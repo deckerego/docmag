@@ -7,4 +7,8 @@ kubectl create secret generic docmagui-secret --from-literal=username='docmag' -
   2a. Modify document-volumes.yaml to fit the storage location of your documents
   2b. Deploy document-volumes.yaml using `kubectl apply -f document-volumes.yaml`
 
-3. Install DocMag and all its dependencies by executing `helm install .`
+3. This installation will leverage Kubernetes' Ingress controllers. If you do not
+already have an Ingress controller available, the nginx version can
+be installed with:
+
+    helm install stable/nginx-ingress --name my-nginx --set rbac.create=true
