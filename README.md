@@ -16,7 +16,13 @@ Usually you won't want to build and run docmag locally, instead it is best to
 run the docker container published at: https://hub.docker.com/r/deckerego/docmagui/
 
 
-## Installing with Docker Compose
+## Using with Docker Compose
+
+If you are installing on a single server, Docker Compose is probably the easiest way
+to get DocMag running.
+
+
+### Installing with Compose
 
 You can install docmag and its dependencies (including Elasticsearch and docidx) using
 just the docker-compose.yml file by extracting the latest release found at:
@@ -33,7 +39,17 @@ search within the directory `/tmp/fs`. A sample startup script is offered as `st
 
 docker-compose should bring up docmag's user interface and Elasticsearch indexes, while also
 indexing new documents in the background. By default the web application is running
-locally on port 1080.
+locally on port 80.
+
+
+### Upgrading with Compose
+
+While it might be possible to do an in-place upgrade or update, I would recommend a full
+re-start to deploy the latest version of each component. This would include:
+
+1. From the directory you started docmag, issue `export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose down`
+2. Extract the latest release docker-compose.yml from https://github.com/deckerego/docmag/releases
+3. Re-start docmag as you did before: `export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose up -d`
 
 
 ## Installing into Kubernetes with Helm
@@ -57,17 +73,15 @@ have settings you are happy with, you can create the persistent volume with:
 Once those two steps are done, add the DocMag repo and install with:
 
     helm repo add docmag http://helm.deckerego.net
-    helm install --name=docmag --set modsecurity.service.externalIP=10.200.1.10 docmag/docmag
+    helm install --name=docmag --set ingress.hosts={node.yourdomain.egg} docmag/docmag
 
+Note `ingress.hosts` needs to be specified in order to expose the application
+outside of your cluster.
 
-## Upgrading
-
-While it might be possible to do an in-place upgrade or update, I would recommend a full
-re-start to deploy the latest version of each component. This would include:
-
-1. From the directory you started docmag, issue `export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose down`
-2. Extract the latest release docker-compose.yml from https://github.com/deckerego/docmag/releases
-3. Re-start docmag as you did before: `export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose up -d`
+Note that while Docker Compose places the web interface behind a web application
+firewall, the default Helm installation _DOES NOT_. It is the job of the Ingress
+controller to provide a web application firewall and SSL termination. See
+docmag/templates/NOTES.txt for additional details.
 
 
 ## Using docidx to Index Files
