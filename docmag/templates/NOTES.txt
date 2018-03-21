@@ -2,7 +2,9 @@ To use Helm to install DocMag:
 
 1. Create a password for the user interface using:
 
-    kubectl create secret generic docmagui-secret --from-literal=username='docmag' --from-literal=password='supersecretpassword'
+    kubectl create secret generic docmagui-secret \
+    --from-literal=username='docmag' \
+    --from-literal=password='supersecretpassword'
 
 2. Ensure you have a persistent volume already created that points to your document repository. If not:
   2a. Modify document-volumes.yaml to fit the storage location of your documents
@@ -22,3 +24,17 @@ can be installed with Helm, as in:
 This release has also been tested with modsecurity for web application firewalling -
 see https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/modsecurity.md
 for details on how this can be configured with nginx.
+
+To serve the web interface over TLS, first create a Secret within Kubernetes
+that contains the TLS certificate and key. An example of how to do this with
+the nginx Ingress controller might be:
+
+    kubectl create secret tls docmag-tls \
+    --key etc/live/yourdomain.egg/privkey.pem \
+    --cert etc/live/yourdomain.egg/fullchain.pem
+
+Once the secret is installed, an install command like the following can be used:
+
+    helm install docmag/docmag --name=docmag \
+    --set ingress.hosts={node.yourdomain.egg} \
+    --set ingress.tls.secretName=docmag-tls

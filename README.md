@@ -52,7 +52,13 @@ re-start to deploy the latest version of each component. This would include:
 3. Re-start docmag as you did before: `export DOCUMENT_HOST_DIR=/mnt/documents && docker-compose up -d`
 
 
-## Installing into Kubernetes with Helm
+## Hosting DocMag using Kubernetes
+
+DocMag can be easily used with Kubernetes or with Docker Compose, and has been
+tested on bare-metal (non-cloud) installations of Kubernetes clusters.
+
+
+### Installing with Helm
 
 Installing into a Kubernetes cluster is pretty easy, thanks to Helm. Before you
 install DocMag you will need to do two things however:
@@ -73,15 +79,32 @@ have settings you are happy with, you can create the persistent volume with:
 Once those two steps are done, add the DocMag repo and install with:
 
     helm repo add docmag http://helm.deckerego.net
-    helm install --name=docmag --set ingress.hosts={node.yourdomain.egg} docmag/docmag
+    helm install docmag/docmag --name=docmag --set ingress.hosts={node.yourdomain.egg}
 
 Note `ingress.hosts` needs to be specified in order to expose the application
 outside of your cluster.
+
+
+### Securing DocMag with Helm
 
 Note that while Docker Compose places the web interface behind a web application
 firewall, the default Helm installation _DOES NOT_. It is the job of the Ingress
 controller to provide a web application firewall and SSL termination. See
 docmag/templates/NOTES.txt for additional details.
+
+To serve the web interface over TLS, first create a Secret within Kubernetes
+that contains the TLS certificate and key. An example of how to do this with
+the nginx Ingress controller might be:
+
+    kubectl create secret tls docmag-tls \
+    --key etc/live/yourdomain.egg/privkey.pem \
+    --cert etc/live/yourdomain.egg/fullchain.pem
+
+Once the secret is installed, an install command like the following can be used:
+
+    helm install docmag/docmag --name=docmag \
+    --set ingress.hosts={node.yourdomain.egg} \
+    --set ingress.tls.secretName=docmag-tls
 
 
 ## Using docidx to Index Files
