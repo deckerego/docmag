@@ -41,10 +41,14 @@ class SearchController {
 
         results.content.each { doc ->
             if(doc.body) {
-                int idx = doc.body.indexOf(query)
-                int minlen = idx < 50 ? 0 : idx - 50
-                int maxlen = doc.body.size() < idx + 400 ? doc.body.size() : idx + 400
+                int idx = doc.body.toLowerCase().indexOf(query.toLowerCase())
+                int minlen = idx < 20 ? 0 : idx - 20
+                int maxlen = doc.body.size() < idx + 430 ? doc.body.size() : idx + 430
                 doc.body = doc.body.substring(minlen, maxlen)
+
+                String matchToken = query.replaceAll("[^A-Za-z0-9]", "")
+                if(matchToken?.trim())
+                  doc.body = doc.body.replaceAll("(?i)"+matchToken, { "<mark>"+it+"</mark>" })
             }
         }
 

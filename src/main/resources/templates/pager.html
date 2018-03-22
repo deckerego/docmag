@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<nav aria-label="Page navigation" th:fragment="pager">
+    <ul class="pagination">
+        <li class="page-item" th:classappend="(1 eq ${currentPage})? 'disabled'">
+            <a class="page-link" th:href="(${currentPage} gt 1)? @{/search/(query=${query}, tag=${tags}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="(${i} eq ${currentPage})? 'active'">
+            <a class="page-link" th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a>
+        </li>
+
+        <li class="page-item" th:classappend="(${totalPages} eq ${currentPage})? 'disabled'">
+            <a class="page-link" th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, tag=${tags}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+</html>
