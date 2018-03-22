@@ -43,29 +43,13 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    <li class="page-item" th:classappend="(1 eq ${currentPage})? 'disabled'">
-                        <a class="page-link" th:href="(${currentPage} gt 1)? @{/search/(query=${query}, tag=${tags}, page=(${currentPage} - 2), startTime=${startTime}, endTime=${endTime})}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+            <div th:text="|Found ${results.totalElements} out of ${totalDocs} documents|"></div>
+        </div>
+    </div>
 
-                    <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="(${i} eq ${currentPage})? 'active'">
-                        <a class="page-link" th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a>
-                    </li>
-
-                    <li class="page-item" th:classappend="(${totalPages} eq ${currentPage})? 'disabled'">
-                        <a class="page-link" th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, tag=${tags}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <p>
-                Found <span th:text="${results.totalElements}"></span> documents
-                out of <span th:text="${totalDocs}"></span>
-            </p>
+    <div class="row">
+        <div class="col-lg-12">
+            <div th:replace="pager :: pager">&nbsp;</div>
         </div>
     </div>
 
@@ -77,22 +61,20 @@
                 </a>
 
                 <div class="card-body">
-                    <h6 class="card-title" th:text="${document.lastModified}"></h6>
+                    <h6 class="card-title" th:utext="|Last Modified: ${document.lastModified}|"></h6>
+
+                    <h6 th:text="|Folder: ${document.parentPath}|"></h6>
+
+                    <span th:each="tag : ${document.tags}">
+                        <span class="badge badge-info" th:text="${tag.name}"></span>
+                    </span>
+                    <a th:href="@{/tags/create(documentId=${document.id})}">
+                        <span class="badge badge-primary">+ Add Tag</span>
+                    </a>
 
                     <div class="media">
                         <div class="media-body">
-                            <table class="table">
-                                <tr>
-                                    <th th:text="(${#objects.nullSafe(document.tags?.size(), 0)} le 0)? 'No Tags' : 'Document Tags:'"></th>
-                                    <th><a th:href="@{/tags/create(documentId=${document.id})}">Add Tag</a></th>
-                                </tr>
-                                <tr th:each="tag : ${document.tags}">
-                                    <td th:text="${tag.name}"></td>
-                                    <td th:text="${tag.score}"></td>
-                                </tr>
-                            </table>
-
-                            <p class="card-text" th:text="${document.body}"></p>
+                            <p class="card-text" th:utext="${document.body}"></p>
                         </div>
 
                         <a th:href="@{/read(id=${document.id})}" target="_blank">
@@ -101,6 +83,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div th:replace="pager :: pager">&nbsp;</div>
         </div>
     </div>
 </div>
