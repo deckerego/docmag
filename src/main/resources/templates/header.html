@@ -3,8 +3,11 @@
 
 <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #e3f2fd;" th:fragment="header(page)">
     <a class="navbar-brand" href="/">DocMag</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenuItems" aria-controls="navbarMenuItems" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <div class="navbar-collapse w-100 order-1 order-sm-0 dual-collapse2">
+    <div class="collapse navbar-collapse w-100 order-1 order-sm-0 dual-collapse2" id="navbarMenuItems">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" th:classappend="${page == 'search' ? 'active' : ''}" href="/search">Search</a>
@@ -13,9 +16,7 @@
                 <a class="nav-link" th:classappend="${page == 'tags' ? 'active' : ''}" href="/tags">Tags</a>
             </li>
         </ul>
-    </div>
 
-    <div class="navbar-collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://github.com/deckerego/docmag/wiki">Help</a>
