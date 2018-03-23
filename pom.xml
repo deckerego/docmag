@@ -92,22 +92,6 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<!-- This should not be necessary when using the starter parent,
-			     but for some reason Maven resource loading stopped working -->
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-
-			<resource>
-				<directory>target/generated-sources</directory>
-				<excludes>
-					<exclude>groovy-stubs/**</exclude>
-				</excludes>
-			</resource>
-		</resources>
-
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
