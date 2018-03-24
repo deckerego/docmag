@@ -9,9 +9,11 @@
             </a>
         </li>
 
-        <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="(${i} eq ${currentPage})? 'active'">
-            <a class="page-link" th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a>
-        </li>
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="(${i} gt 8)? 'd-none d-md-block'">
+            <li class="page-item" th:classappend="(${i} eq ${currentPage})? 'active'">
+                <a class="page-link" th:href="@{/search/(query=${query}, tag=${tags}, page=${i - 1}, startTime=${startTime}, endTime=${endTime})}" th:text="${i}"></a>
+            </li>
+        </span>
 
         <li class="page-item" th:classappend="(${totalPages} eq ${currentPage})? 'disabled'">
             <a class="page-link" th:href="(${currentPage} lt ${totalPages})? @{/search/(query=${query}, tag=${tags}, page=${currentPage}, startTime=${startTime}, endTime=${endTime})}" aria-label="Next">

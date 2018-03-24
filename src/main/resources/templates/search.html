@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Docmag Search</title>
+    <title>Facile Document Search</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
@@ -65,9 +65,9 @@
 
                     <h6 th:text="|Folder: ${document.parentPath}|"></h6>
 
-                    <span th:each="tag : ${document.tags}">
+                    <a th:href="@{/search(tag=${tag.name})}" th:each="tag : ${document.tags}" style="text-decoration:none;">
                         <span class="badge badge-info" th:text="${tag.name}"></span>
-                    </span>
+                    </a>
                     <a th:href="@{/tags/create(documentId=${document.id})}">
                         <span class="badge badge-primary">+ Add Tag</span>
                     </a>
