@@ -67,7 +67,7 @@ spec:
       volumes:
       - name: {{ template "docmag.fullname" . }}
         persistentVolumeClaim:
-          claimName: docidx
+          claimName: {{ .Release.Name }}-docidx
           readOnly: true
     {{- with .Values.nodeSelector }}
       nodeSelector:
