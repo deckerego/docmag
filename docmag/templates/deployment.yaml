@@ -60,9 +60,6 @@ spec:
           periodSeconds: 10
         resources:
 {{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.nodeSelector }}
-{{ toYaml . | indent 8 }}
-    {{- end }}
         volumeMounts:
         - mountPath: /usr/share/docmagui/docs
           name: {{ template "docmag.fullname" . }}
@@ -70,9 +67,12 @@ spec:
       volumes:
       - name: {{ template "docmag.fullname" . }}
         persistentVolumeClaim:
-          claimName: {{ template "docmag.fullname" . }}
+          claimName: docidx
           readOnly: true
+    {{- with .Values.nodeSelector }}
       nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
     {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
