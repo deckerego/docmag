@@ -1,6 +1,7 @@
 package net.deckerego.docmag.controller
 
 import net.deckerego.docmag.configuration.DocConfig
+import net.deckerego.docmag.configuration.TaggingConfig
 import net.deckerego.docmag.model.ScannedDoc
 import net.deckerego.docmag.repository.ScannedRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,6 +23,9 @@ class SearchController {
 
     @Autowired
     DocConfig docConfig
+
+    @Autowired
+    TaggingConfig taggingConfig
 
     @GetMapping
     def search(Model model,
@@ -50,6 +54,9 @@ class SearchController {
                 if(matchToken?.trim())
                   doc.body = doc.body.replaceAll("(?i)"+matchToken, { "<mark>"+it+"</mark>" })
             }
+
+            if(doc.tags)
+                doc.tags.removeAll { it.score < taggingConfig.threshold }
         }
 
         int totalPages = results.totalElements <= 0 ? 1 : Math.ceil(results.totalElements / pageable.pageSize) as int
