@@ -62,13 +62,23 @@ spec:
 {{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
         - mountPath: /usr/share/docmagui/docs
-          name: {{ template "docmag.fullname" . }}
+          name: {{ template "docmag.fullname" . }}-files
+          readOnly: true
+        volumeMounts:
+        - mountPath: "/opt/docmag/config"
+          name: {{ template "docmag.fullname" . }}-config
           readOnly: true
       volumes:
       - name: {{ template "docmag.fullname" . }}
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-docidx
           readOnly: true
+      - name: {{ template "docmag.fullname" . }}-config
+        configMap:
+          name: {{ template "docmag.fullname" . }}
+          items:
+          - key: application.properties
+            path: application.properties
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
