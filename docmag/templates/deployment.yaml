@@ -64,12 +64,11 @@ spec:
         - mountPath: /usr/share/docmagui/docs
           name: {{ template "docmag.fullname" . }}-files
           readOnly: true
-        volumeMounts:
         - mountPath: "/opt/docmag/config"
           name: {{ template "docmag.fullname" . }}-config
           readOnly: true
       volumes:
-      - name: {{ template "docmag.fullname" . }}
+      - name: {{ template "docmag.fullname" . }}-files
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-docidx
           readOnly: true

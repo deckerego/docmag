@@ -10,4 +10,4 @@ metadata:
 data:
   application.properties: |
     document.pagesize=5
-    tagging.threshold=0.88
+    tagging.threshold=0.80
