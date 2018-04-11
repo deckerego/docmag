@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: deckerego/docmagui
-  tag: 0.4.9
+  tag: 0.4.10
   pullPolicy: Always
 
 service:

@@ -1,6 +1,7 @@
 package net.deckerego.docmag
 
 import net.deckerego.docmag.configuration.DocConfig
+import net.deckerego.docmag.configuration.TaggingConfig
 import net.deckerego.docmag.controller.SearchController
 import net.deckerego.docmag.model.ScannedDoc
 import net.deckerego.docmag.repository.ScannedRepository
@@ -20,7 +21,6 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 import static org.hamcrest.Matchers.*
-import static org.mockito.BDDMockito.isNull
 import static org.mockito.BDDMockito.given
 import static org.mockito.BDDMockito.eq
 import static org.mockito.BDDMockito.any
@@ -39,6 +39,9 @@ class SearchControllerTests {
 
     @MockBean
     private DocConfig docConfig
+
+    @MockBean
+    private TaggingConfig taggingConfig
 
     @MockBean
     private Page<ScannedDoc> results
@@ -140,6 +143,41 @@ class SearchControllerTests {
                 .andExpect(model().attribute("query", is("*")))
                 .andExpect(model().attribute("tags", contains("tagOne", "tagTwo")))
                 .andExpect(model().attribute("results", hasProperty("content")))
+                .andExpect(model().attribute("totalPages", is(1)))
+                .andExpect(model().attribute("totalDocs", is(10L)))
+                .andExpect(model().attribute("currentPage", is(1)))
+                .andExpect(model().attribute("startTime", notNullValue()))
+                .andExpect(model().attribute("endTime", notNullValue()))
+    }
+
+    @Test
+    @WithMockUser
+    void fetchFilteredTags() {
+        def tags = [
+            new ScannedDoc.Tag(name: "TagOne", score: 0.5),
+            new ScannedDoc.Tag(name: "TagTwo", score: 0.99)
+        ]
+        def result = new ScannedDoc(id: "feedfacedeadbeef", body: "nothing", lastModified: Calendar.instance.time, parentPath: "/no", fileName: "where", tags: tags)
+
+        given(this.docConfig.getPagesize()).willReturn(1)
+        given(this.taggingConfig.getThreshold()).willReturn(0.75f)
+        given(this.results.getContent()).willReturn([result])
+        given(this.results.getTotalElements()).willReturn(1L)
+        given(this.repository.findByContent(any(), any(Collection.class), any(), any(), any())).willReturn(this.results)
+        given(this.repository.documentCount()).willReturn(10L)
+
+        this.mvc.perform(get("/search")
+                .param("tag", "tagOne", "tagTwo")
+                .accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("query", is("*")))
+                .andExpect(model().attribute("tags", contains("tagOne", "tagTwo")))
+                .andExpect(model().attribute("results", hasProperty("content", hasItem(
+                    allOf(
+                            hasProperty("tags", contains(tags[1])),
+                            hasProperty("tags", not(contains(tags[0])))
+                    )
+                ))))
                 .andExpect(model().attribute("totalPages", is(1)))
                 .andExpect(model().attribute("totalDocs", is(10L)))
                 .andExpect(model().attribute("currentPage", is(1)))
