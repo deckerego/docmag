@@ -1,4 +1,4 @@
 dependencies:
 - name: docidx
-  version: "0.2.2"
-  repository: "http://helm.deckerego.net"
+  version: "0.2.5"
+  repository: "http://127.0.0.1:8879"
