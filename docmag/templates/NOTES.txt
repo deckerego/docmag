@@ -7,8 +7,8 @@ To use Helm to install DocMag:
     --from-literal=password='supersecretpassword'
 
 2. Ensure you have a persistent volume already created that points to your document repository. If not:
-  2a. Modify document-volumes.yaml to fit the storage location of your documents
-  2b. Deploy document-volumes.yaml using `kubectl apply -f document-volumes.yaml`
+  2a. Modify document-volumes.sample to fit the storage location of your documents
+  2b. Deploy this Persistent Volume using `kubectl apply -f document-volumes.yaml`
 
 3. This installation uses the Ingress feature of Kubernetes, and presupposes that
 you have an Ingress controller already installed.
