@@ -61,8 +61,6 @@ services:
 volumes:
   esdata01:
     driver: local
-  fscconfig:
-    driver: local
 
 networks:
   esnet:
