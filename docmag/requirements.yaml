@@ -1,4 +1,5 @@
 dependencies:
 - name: docidx
-  version: "0.4.11"
-  repository: "http://helm.deckerego.net"
+  version: "0.4.13"
+#  repository: "http://helm.deckerego.net"
+  repository: "@local"
