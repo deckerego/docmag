@@ -1,7 +1,7 @@
 version: '3'
 services:
   elasticsearch:
-    image: deckerego/elasticsearch:5.6.4
+    image: deckerego/elasticsearch:5.6.8
     container_name: elasticsearch01
     environment:
       - "ES_JAVA_OPTS=-Xms800M -Xmx800M"
