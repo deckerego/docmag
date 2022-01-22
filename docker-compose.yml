@@ -52,6 +52,7 @@ services:
     container_name: modsecurity
     environment:
       - PARANOIA=3
+      - BACKEND=http://docmagui:8080
     depends_on: [ docmagui ]
     ports:
       - 1080:80

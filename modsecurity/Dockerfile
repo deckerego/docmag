@@ -1,5 +1,3 @@
-FROM owasp/modsecurity-crs:latest
+FROM owasp/modsecurity-crs:apache
 
 MAINTAINER john@deckerego.net
-
-ADD docmagui.conf /etc/httpd/conf.d/
