@@ -1,6 +1,6 @@
 # Facile Search
 
-**--> DocMag and DocIndex have been retired - take a look at [](https://docs.paperless-ngx.com/) as a replacement. <--**
+**--> DocMag and DocIndex have been retired - take a look at [Paperless-ngx](https://docs.paperless-ngx.com/) as a replacement. <--**
 
 Facile Search bundles together Elasticsearch and DocIndex
 to make searching across documents simple and efficient.
